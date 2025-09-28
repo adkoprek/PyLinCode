@@ -9,7 +9,6 @@ const props = defineProps({
   <div class="w-full flex justify-center pl-6 pr-2 py-6 h-full">
     <div class="w-full bg-white rounded-2xl shadow-xl p-6 flex flex-col">
       <h2 class="text-5xl font-bold">{{ title }}</h2>
-      <div v-katex="description" class="text-lg mt-3 text-gray-700">{{ description }}</div>
     </div>
   </div>
 </template>

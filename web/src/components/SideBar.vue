@@ -1,22 +1,22 @@
 <script setup>
 import { ref } from "vue";
+import { RouterLink } from "vue-router";
+import lessons_data from "../assets/lessons.json";
 
 const isOpen = ref(false);
-const lessons = [
-  { num: 1, title: "Introduction" },
-  { num: 2, title: "Variables & Types" },
-  { num: 3, title: "Control Flow" },
-  { num: 4, title: "Functions" },
-  { num: 5, title: "Data Structures" },
-];
+const lessons = lessons_data.lessons;
+
+defineProps({
+  selected_id: {
+    type: Number,
+    required: true
+  }
+});
 
 function toggleSidebar() {
   isOpen.value = !isOpen.value;
 }
 
-function handleClick(item) {
-  console.log(item);
-}
 </script>
 
 <template>
@@ -36,28 +36,28 @@ function handleClick(item) {
         ☰
       </button>
       <ul class="space-y-2">
-        <li
-          v-for="lesson in lessons"
-          :key="lesson.num"
-          :class="[
-            'flex items-center justify-center space-x-3 cursor-pointer p-3 group',
-            isOpen ? 'justify-start pl-4' : 'justify-center'
-          ]"
-          @click="handleClick(lesson.title)"
-        >
-          <div
+        <RouterLink :to="`/coding/${parseInt(lesson.id)}`" v-for="lesson in lessons" :key="lesson.id">
+          <li
             :class="[
-                'flex items-center justify-center border w-8 h-8 rounded-full text-sm font-semibold group-hover:bg-indigo-500 group-hover:text-white transition',
-                isOpen ? ' text-white border-white' : 'border-indigo-500 text-gray-700'
+              'flex items-center justify-center space-x-3 cursor-pointer p-3 group',
+              isOpen ? 'justify-start pl-4' : 'justify-center'
             ]"
           >
-            {{ lesson.num }}
-          </div>
+            <div
+              :class="[
+                  'flex items-center justify-center border w-8 h-8 rounded-full text-sm font-semibold group-hover:bg-indigo-500 group-hover:text-white transition',
+                  isOpen ? ' text-white border-white' : 'border-indigo-500 text-gray-700',
+                  selected_id == lesson.id ? 'bg-indigo-500 text-white' : ''
+              ]"
+            >
+              {{ lesson.id }}
+            </div>
 
-          <span v-if="isOpen" class="truncate font-medium">
-            {{ lesson.title }}
-          </span>
-        </li>
+            <span v-if="isOpen" class="truncate font-medium">
+              {{ lesson.title }}
+            </span>
+          </li>
+        </RouterLink>
       </ul>
     </div>
   </div>
