@@ -20,7 +20,10 @@ function toggleSidebar() {
 </script>
 
 <template>
-  <div class="flex bg-white z-30">
+  <div :class="[
+    'flex z-30 overflow-scroll',
+    isOpen ? 'bg-indigo-600' : 'bg-transparent',
+  ]">
     <div
       :class="[
         'text-gray-50 transition-all duration-400',

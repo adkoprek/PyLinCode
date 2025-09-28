@@ -39,7 +39,7 @@ onMounted(() => {
 
 
 <template>
-    <div class="w-full flex bg-gray-50">
+    <div class="w-full flex bg-gray-50" style="height: calc(100vh - 3.5rem);">
         <Sidebar :selected_id="lesson.id" />
         <DragCol style="width: 100vw; height: calc(100vh - 3.5rem);" slider-bg-color="transparent" slider-bg-hover-color="transparent">
             <template #left>
