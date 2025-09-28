@@ -1,0 +1,148 @@
+{
+    "lessons": [
+        {
+            "id": 1,
+            "title": "vec_add",
+            "description": "",
+            "file": "vector.py"
+        },
+        {
+            "id": 2,
+            "title": "vec_scl",
+            "description": "",
+            "file": "vector.py"
+        },
+        {
+            "id": 3,
+            "title": "vec_dot",
+            "description": "",
+            "file": "vector.py"
+        },
+        {
+            "id": 4,
+            "title": "vec_len",
+            "description": "",
+            "file": "vector.py"
+        },
+        {
+            "id": 5,
+            "title": "vec_nor",
+            "description": "",
+            "file": "vector.py"
+        },
+        {
+            "id": 6,
+            "title": "mat_siz",
+            "description": "",
+            "file": "matrix.py"
+        },
+        {
+            "id": 7,
+            "title": "mat_add",
+            "description": "",
+            "file": "matrix.py"
+        },
+        {
+            "id": 8,
+            "title": "mat_row",
+            "description": "",
+            "file": "matrix.py"
+        },
+        {
+            "id": 9,
+            "title": "mat_col",
+            "description": "",
+            "file": "matrix.py"
+        },
+        {
+            "id": 10,
+            "title": "mat_ide",
+            "description": "",
+            "file": "matrix.py"
+        },
+        {
+            "id": 11,
+            "title": "mat_mul",
+            "description": "",
+            "file": "matrix.py"
+        },
+        {
+            "id": 12,
+            "title": "mat_tra",
+            "description": "",
+            "file": "matrix.py"
+        },
+        {
+            "id": 13,
+            "title": "mat_det",
+            "description": "",
+            "file": "matrix.py"
+        },
+        {
+            "id": 14,
+            "title": "mat_vec_mul",
+            "description": "",
+            "file": "mat_vec.py"
+        },
+        {
+            "id": 15,
+            "title": "lu",
+            "description": "",
+            "file": "lu.py"
+        },
+        {
+            "id": 16,
+            "title": "solve",
+            "description": "",
+            "file": "lu.py"
+        },
+        {
+            "id": 17,
+            "title": "inv",
+            "description": "",
+            "file": "inverse.py"
+        },
+        {
+            "id": 18,
+            "title": "rref",
+            "description": "",
+            "file": "rref.py"
+        },
+        {
+            "id": 19,
+            "title": "vec_prj",
+            "description": "",
+            "file": "qr.py"
+        },
+        {
+            "id": 20,
+            "title": "mat_prj",
+            "description": "",
+            "file": "qr.py"
+        },
+        {
+            "id": 21,
+            "title": "ortho",
+            "description": "",
+            "file": "qr.py"
+        },
+        {
+            "id": 22,
+            "title": "ortho_base",
+            "description": "",
+            "file": "qr.py"
+        },
+        {
+            "id": 23,
+            "title": "qr",
+            "description": "",
+            "file": "qr.py"
+        },
+        {
+            "id": 24,
+            "title": "det",
+            "description": "",
+            "file": "determinant.py"
+        }
+    ]
+}
