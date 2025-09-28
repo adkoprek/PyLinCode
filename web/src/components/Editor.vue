@@ -83,6 +83,7 @@ const editorOptions = {
           <template #top>
             <div class="h-full overflow-hidden rounded-xl border shadow-inner">
               <CodeEditor
+                class="py-3"
                 v-model:value="code"
                 language="python"
                 theme="my"
@@ -93,7 +94,7 @@ const editorOptions = {
           <template #bottom>
             <div 
               id="terminal"
-              class="h-full bg-black text-green-400 font-mono p-4 rounded-xl shadow-inner overflow-y-auto whitespace-pre-wrap">
+              class="h-full font-mono p-4 rounded-xl shadow-inner border-1 overflow-y-auto whitespace-pre-wrap">
               {{ output }}
             </div>
           </template>
