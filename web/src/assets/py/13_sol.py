@@ -1,0 +1,12 @@
+def mat_vec_mul(a: mat, b: vec) -> vec:
+    rows, cols = mat_siz(a)
+    if cols != len(b):
+        raise ShapeMismatchedError(f"The number of cols ({rows}) in a does not match the length ({len(b)}) of vector b")
+
+    result: vec = []
+
+    for i in range(rows):
+        row = mat_row(a, i)
+        result.append(vec_dot(row, b))
+
+    return result

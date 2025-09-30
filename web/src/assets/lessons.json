@@ -74,72 +74,66 @@
         },
         {
             "id": 13,
-            "title": "mat_det",
-            "description": "",
-            "file": "matrix.py"
-        },
-        {
-            "id": 14,
             "title": "mat_vec_mul",
             "description": "",
             "file": "mat_vec.py"
         },
         {
-            "id": 15,
+            "id": 14,
             "title": "lu",
             "description": "",
             "file": "lu.py"
         },
         {
-            "id": 16,
+            "id": 15,
             "title": "solve",
             "description": "",
             "file": "lu.py"
         },
         {
-            "id": 17,
+            "id": 16,
             "title": "inv",
             "description": "",
             "file": "inverse.py"
         },
         {
-            "id": 18,
+            "id": 17,
             "title": "rref",
             "description": "",
             "file": "rref.py"
         },
         {
-            "id": 19,
+            "id": 18,
             "title": "vec_prj",
             "description": "",
             "file": "qr.py"
         },
         {
-            "id": 20,
+            "id": 19,
             "title": "mat_prj",
             "description": "",
             "file": "qr.py"
         },
         {
-            "id": 21,
+            "id": 20,
             "title": "ortho",
             "description": "",
             "file": "qr.py"
         },
         {
-            "id": 22,
+            "id": 21,
             "title": "ortho_base",
             "description": "",
             "file": "qr.py"
         },
         {
-            "id": 23,
+            "id": 22,
             "title": "qr",
             "description": "",
             "file": "qr.py"
         },
         {
-            "id": 24,
+            "id": 23,
             "title": "det",
             "description": "",
             "file": "determinant.py"
