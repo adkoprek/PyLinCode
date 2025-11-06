@@ -1,5 +1,4 @@
 <script setup>
-import Markdown from './Markdown.vue';
 import { ref, onMounted } from 'vue'
 
 const props = defineProps({
@@ -23,7 +22,7 @@ onMounted(async () => {
 <template>
   <div class="w-full flex justify-center pl-6 pr-2 py-6 h-full">
     <div class="w-full bg-white rounded-2xl shadow-xl p-6 pt-0 flex flex-col">
-      <div ref="shadowHost"></div>
+      <div class="overflow-y-scroll" ref="shadowHost"></div>
     </div>
   </div>
 </template>
