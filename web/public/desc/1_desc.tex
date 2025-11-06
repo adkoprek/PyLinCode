@@ -1,0 +1,24 @@
+Create a function named $\texttt{vec\_add}$ that takes two vectors as its arguments and returns their sum.  
+If the dimensions of the two vectors differ, your function must raise a $\texttt{ShapeMismatchedError}$.
+
+$$
+\begin{pmatrix} 1 \\ 10 \\ 2 \\ 6 \end{pmatrix} +
+\begin{pmatrix} 8 \\ 12 \\ 8 \\ 1 \end{pmatrix} =
+\begin{pmatrix} 9 \\ 22 \\ 10 \\ 7 \end{pmatrix}
+$$
+
+```python
+a: vec = [1, 10, 2, 6]
+b: vec = [8, 12, 8, 1]
+
+assert vec_add(a, b) == [9, 22, 10, 7]
+```
+
+$$
+\begin{itemize}
+    \item Test Cases: 50
+    \item Error Test Cases: 5
+    \item Max Dimension: 10
+    \item Tolerance: , 
+\end{itemize}
+$$

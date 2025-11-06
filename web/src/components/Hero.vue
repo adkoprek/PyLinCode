@@ -8,7 +8,7 @@
         Here you will implement your own linear algebra library step by step. <br>
         There is no payment and accound required. Just start coding!
       </p>
-      <RouterLink to="/coding">
+      <RouterLink to="/manual">
         <button class="px-8 py-4 bg-indigo-600 text-white text-lg font-semibold rounded-2xl shadow-lg hover:bg-indigo-700 transition transform hover:scale-105">
           Start Coding
         </button>

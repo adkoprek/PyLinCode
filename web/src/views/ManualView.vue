@@ -17,7 +17,7 @@ import { RouterLink } from 'vue-router';
         </header>
         <CodeInfoBlock/>
         <div class="w-full flex justify-center">
-            <RouterLink to="/coding">
+            <RouterLink to="/coding/1">
                 <button class="px-12 py-5 bg-indigo-600 text-white text-xl font-semibold rounded-2xl shadow-lg hover:bg-indigo-700 transition transform hover:scale-105">
                     Start Coding
                 </button>

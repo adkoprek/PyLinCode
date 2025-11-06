@@ -6,15 +6,40 @@ import { loadPyodide } from "pyodide";
 import { VueSpinnerIos } from "vue3-spinners";
 import * as monaco from "monaco-editor";
 import DragRow from "vue-resizer/DragRow.vue";
+import lessons_data from "@/assets/lessons.json"
 
-const code = ref(`print("Hello from Python!")`);
+const code = ref("");
 const output = ref("");
+const lesson = ref({})
 const isRunning = ref(false);
 const isLoading = ref(true);
 let pyodide = null;
+let solution = null;
+
+const props = defineProps({
+    id: {
+        type: Number,
+        required: true
+    }
+});
+
+onMounted(async () => {
+  lesson.value = lessons_data.lessons.find(lesson => parseInt(lesson.id) === props.id);
+  if (!lesson.value) return;
+
+  const res = await fetch(`/py/${lesson.value.id}_sol.py`);
+  solution = await res.text();
+  code.value = solution.split("\n")[0];
+
+  await initPyodide();
+  await initMonaco();
+});
 
 async function initPyodide() {
-  pyodide = await loadPyodide();
+  pyodide = await loadPyodide({
+    stdout: (s) => (console.log(s), output.value += s + "\n"),
+    stderr: (s) => (output.value += s + "\n"),
+  });
   console.log("Pyodide initialized!");
   isLoading.value = false;
   pyodide.setStdout({
@@ -29,8 +54,7 @@ async function initPyodide() {
   });
 }
 
-onMounted(async () => {
-  await initPyodide();
+async function initMonaco() {
   monaco.editor.defineTheme("my", {
     base: 'vs',
     inherit: true,
@@ -39,19 +63,15 @@ onMounted(async () => {
       'editor.background': '#ffffff'
     }
   });
-});
+}
 
 async function runCode() {
   output.value = "";
   isRunning.value = true;
   try {
-    const result = await pyodide.runPythonAsync(code.value);
-    if (result !== undefined) {
-      output.value += result + "\n";
-    }
-  } catch (err) {
-    output.value += "Error: " + err.message + "\n";
-  } finally {
+    await pyodide.runPythonAsync(code.value);
+  } catch (err) {} 
+  finally {
     isRunning.value = false;
     const term = document.querySelector("#terminal");
     if (term) term.scrollTop = term.scrollHeight;
@@ -92,11 +112,9 @@ const editorOptions = {
             </div>
           </template>
           <template #bottom>
-            <div 
-              id="terminal"
-              class="h-full font-mono p-4 rounded-xl shadow-inner border-1 overflow-y-auto whitespace-pre-wrap">
+            <pre style="white-space: pre;" id="terminal" class="h-full font-mono p-4 rounded-xl shadow-inner border overflow-scroll">
               {{ output }}
-            </div>
+            </pre>
           </template>
         </DragRow>
         

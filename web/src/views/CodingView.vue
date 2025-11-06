@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { ref, watchEffect } from 'vue';
 import Task from '@/components/Task.vue';
 import Editor from '@/components/Editor.vue';
 import DragCol from "vue-resizer/DragCol.vue";
@@ -15,25 +15,15 @@ const props = defineProps({
 
 const lesson = ref({})
 
-watch(() => props.id, (newId) => {
-    lesson.value = lessons_data.lessons.find(lesson => parseInt(lesson.id) === newId) || 
-    { 
-        id: -1,
-        title: "Lesson Not Found", 
-        description: "The requested lesson does not exist.",
-        code: ""
-    };
-});
-
-onMounted(() => {
-    console.log("Mounted with lesson id:", props.id);
-    lesson.value = lessons_data.lessons.find(lesson => parseInt(lesson.id) === props.id) || 
-    { 
-        id: -1,
-        title: "Lesson Not Found", 
-        description: "The requested lesson does not exist.",
-        code: ""
-    };
+watchEffect(() => {
+  lesson.value = lessons_data.lessons.find(
+    lesson => parseInt(lesson.id) === props.id
+  ) || {
+    id: -1,
+    title: "Lesson Not Found",
+    description: "The requested lesson does not exist.",
+    code: ""
+  };
 });
 </script>
 
@@ -43,10 +33,10 @@ onMounted(() => {
         <Sidebar :selected_id="lesson.id" />
         <DragCol style="width: 100vw; height: calc(100vh - 3.5rem);" slider-bg-color="transparent" slider-bg-hover-color="transparent">
             <template #left>
-                <Task :title="lesson.title" :description="lesson.description" />
+                <Task :id="lesson.id" :title="lesson.title" />
             </template>
             <template #right>
-                <Editor />
+                <Editor :id="lesson.id"/>
             </template>
         </DragCol>
     </div>

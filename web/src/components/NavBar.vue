@@ -31,7 +31,7 @@ const isActiveLink = (routePath) => {
             :class="isActiveLink('/manual') ? 'text-indigo-600' : 'hover:text-indigo-600'"
         >Manual</RouterLink>
         <RouterLink
-            to="/coding"
+            to="/coding/1"
             :class="isActiveLink('/coding') ? 'text-indigo-600' : 'hover:text-indigo-600'"
         >Coding</RouterLink>
       </div>

@@ -1,0 +1,23 @@
+Create a function named \texttt{vec\_dot} that returns the dot product of two vectors.  
+If the dimensions of the two vectors differ, your function must raise a \texttt{ShapeMismatchedError}.
+
+\[
+\begin{pmatrix} 2 \\ 3 \\ 4 \end{pmatrix} \cdot
+\begin{pmatrix} 5 \\ 6 \\ 7 \end{pmatrix}
+= 2\cdot5 + 3\cdot6 + 4\cdot7 = 56
+\]
+
+\begin{verbatim}
+a: vec = [2, 3, 4]
+b: vec = [5, 6, 7]
+
+assert vec_dot(a, b) == 56
+\end{verbatim}
+
+\begin{itemize}
+    \item Test Cases: $50$
+    \item Error Test Cases: $5$
+    \item Max Dimension: $10$
+    \item Tolerance: $\,$
+\end{itemize}
+

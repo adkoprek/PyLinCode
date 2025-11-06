@@ -1,0 +1,23 @@
+Create a function named \texttt{vec\_nor} that returns the normalized (unit) vector in the same direction as the input.  
+The zero vector cannot be normalized and should raise a \texttt{ZeroDivisionError}.
+
+\[
+\text{If } \mathbf{v} = 
+\begin{pmatrix} 3 \\ 4 \end{pmatrix}, \quad
+\text{then } \mathbf{\hat{v}} = 
+\frac{1}{5}\begin{pmatrix} 3 \\ 4 \end{pmatrix} =
+\begin{pmatrix} 0.6 \\ 0.8 \end{pmatrix}
+\]
+
+\begin{verbatim}
+a: vec = [3, 4]
+assert vec_nor(a) == [0.6, 0.8]
+\end{verbatim}
+
+\begin{itemize}
+    \item Test Cases: $50$
+    \item Error Test Cases: $5$
+    \item Max Dimension: $10$
+    \item Tolerance: $\,$
+\end{itemize}
+
