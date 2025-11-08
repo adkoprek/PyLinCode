@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watchEffect } from 'vue'
 
 const props = defineProps({
   id: Number,
@@ -7,16 +7,22 @@ const props = defineProps({
 
 const content = ref('')
 const shadowHost = ref(null)
+let shadow = null;
 
 onMounted(async () => {
+  shadow = shadowHost.value.attachShadow({ mode: 'open' });
+  await load_content();
+});
+
+watchEffect(async () => await load_content());
+
+async function load_content() {
   const doc = await fetch(`/desc/${props.id}_desc.html`)
   content.value = await doc.text()
-
-  const shadow = shadowHost.value.attachShadow({ mode: 'open' });
   shadow.innerHTML = `
       <link rel="stylesheet" href="https://stackedit.io/style.css">
       <style>h1 { margin: 0; }</style>` + content.value;
-})
+}
 </script>
 
 <template>

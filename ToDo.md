@@ -2,8 +2,6 @@
 
 ## UI
 
-### Error handling lessons
-
 ### Switching Lessons
 
 Switching a lesson does not work until page gets reloaded

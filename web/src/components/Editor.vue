@@ -3,7 +3,7 @@ import { CodeEditor } from "monaco-editor-vue3";
 import { VueSpinnerIos } from "vue3-spinners";
 import DragRow from "vue-resizer/DragRow.vue";
 import * as monaco from "monaco-editor";
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, watchEffect } from "vue";
 import lessons_data from "@/assets/lessons.json"
 
 const editorOptions = {
@@ -16,7 +16,8 @@ const code = ref("");
 const solution = ref("");
 const output = ref([]);
 const isRunning = ref(false);
-const isLoading = ref(true);
+const isLoading = ref(false);
+let loaded = false;
 let worker = null;
 
 const props = defineProps({
@@ -34,15 +35,17 @@ onMounted(async () => {
 
   worker.onmessage = (e) => {
     const { type, payload } = e.data;
-    if (type === 'ready') isLoading.value = false;
+    if (type === 'ready') {
+      isLoading.value = false;
+      loaded = true;
+      runCode();
+    }
     else if (type === 'out') output.value.push({ type: 'text-black', text: payload });
     else if (type === 'err') output.value.push({ type: 'text-red-500', text: payload });
     else if (type === 'done') isRunning.value = false;
 
     scrollToBottom();
   }
-
-  worker.postMessage({ type: 'setup', payload: { id: props.id } });
 });
 
 function initMonaco() {
@@ -58,6 +61,7 @@ function initMonaco() {
 
 function scrollToBottom() {
   const terminal = document.getElementById("terminal");
+  if (!terminal) return;
   terminal.scrollTop = terminal.scrollHeight;
 }
 
@@ -71,27 +75,31 @@ async function loadCode(id) {
 }
 
 function runCode() {
+  /* Load environment on first run */
+  if (!loaded) {
+    isLoading.value = true;
+    worker.postMessage({ type: 'setup', payload: { id: props.id } });
+    return;
+  }
+
   if (isRunning.value) return;
   output.value = [];
   isRunning.value = true;
   worker.postMessage({ type: "run", payload: { code: code.value } });
 }
+
+watchEffect(async () => {
+  await loadCode(props.id);
+  output.value = [];
+  loaded = false;
+});
 </script>
 
 <template>
   <div class="w-full h-full flex pr-6 pl-2 py-6">
     <div
       class="w-full bg-white rounded-2xl shadow-xl p-6 flex flex-col">
-      <div
-        v-if="isLoading"
-        class="flex flex-col items-center justify-center flex-1 space-y-4">
-        <VueSpinnerIos size="50" color="#4F46E5" />
-        <div class="text-gray-600 text-lg font-medium">
-          Loading Python environment...
-        </div>
-      </div>
-
-      <div v-else class="flex flex-col flex-1 h-screen">
+      <div class="flex flex-col flex-1 h-screen">
         <DragRow class="flex-1" slider-bg-color="transparent" slider-bg-hover-color="trasparent" style="width: 100%;">
           <template #top>
             <div class="h-full overflow-hidden rounded-xl border shadow-inner">
@@ -105,7 +113,15 @@ function runCode() {
             </div>
           </template>
           <template #bottom>
-            <div class="w-full h-full relative">
+            <div v-if="isLoading"
+              class="flex flex-col items-center justify-center align-middle flex-1 space-y-4 rounded-xl border shadow-inner h-full">
+              <VueSpinnerIos size="50" color="#4F46E5" />
+              <div class="text-gray-600 text-lg font-medium">
+                Loading Python environment...
+              </div>
+            </div>
+
+            <div v-else class="w-full h-full relative">
               <div id="terminal" class="absolute top-0 bottom-0 left-0 right-0 font-mono p-4 rounded-xl shadow-inner border overflow-auto">
                 <pre v-for="(line, index) in output" :key="index" :class="line.type">{{ line.text }}</pre>
               </div>
