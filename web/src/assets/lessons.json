@@ -98,42 +98,36 @@
         },
         {
             "id": 17,
-            "title": "rref",
-            "description": "",
-            "file": "rref.py"
-        },
-        {
-            "id": 18,
             "title": "vec_prj",
             "description": "",
             "file": "qr.py"
         },
         {
-            "id": 19,
+            "id": 18,
             "title": "mat_prj",
             "description": "",
             "file": "qr.py"
         },
         {
-            "id": 20,
+            "id": 19,
             "title": "ortho",
             "description": "",
             "file": "qr.py"
         },
         {
-            "id": 21,
+            "id": 20,
             "title": "ortho_base",
             "description": "",
             "file": "qr.py"
         },
         {
-            "id": 22,
+            "id": 21,
             "title": "qr",
             "description": "",
             "file": "qr.py"
         },
         {
-            "id": 23,
+            "id": 22,
             "title": "det",
             "description": "",
             "file": "determinant.py"
