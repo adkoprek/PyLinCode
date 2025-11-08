@@ -2,9 +2,7 @@
 
 ## UI
 
-### Descriptions
-
-Finish the html style descriptions
+### Error handling lessons
 
 ### Async Load
 
