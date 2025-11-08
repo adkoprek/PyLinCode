@@ -4,10 +4,6 @@
 
 ### Error handling lessons
 
-### Async Load
-
-Pyodite dos not load async
-
 ### Switching Lessons
 
 Switching a lesson does not work until page gets reloaded

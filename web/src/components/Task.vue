@@ -3,7 +3,6 @@ import { ref, onMounted } from 'vue'
 
 const props = defineProps({
   id: Number,
-  title: String,
 });
 
 const content = ref('')
