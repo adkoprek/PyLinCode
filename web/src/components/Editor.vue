@@ -1,60 +1,51 @@
 <script setup>
-import { ref, onMounted } from "vue";
 import { CodeEditor } from "monaco-editor-vue3";
-import "monaco-editor-vue3/dist/style.css";
-import { loadPyodide } from "pyodide";
 import { VueSpinnerIos } from "vue3-spinners";
-import * as monaco from "monaco-editor";
 import DragRow from "vue-resizer/DragRow.vue";
+import * as monaco from "monaco-editor";
+import { ref, onMounted, watch } from "vue";
 import lessons_data from "@/assets/lessons.json"
 
+const editorOptions = {
+  automaticLayout: true,
+  fontSize: 12,
+  minimap: { enabled: false },
+};
+
 const code = ref("");
-const output = ref("");
-const lesson = ref({})
+const solution = ref("");
+const output = ref([]);
 const isRunning = ref(false);
 const isLoading = ref(true);
-let pyodide = null;
-let solution = null;
+let worker = null;
 
 const props = defineProps({
-    id: {
-        type: Number,
-        required: true
-    }
+  id: {
+    type: Number,
+    required: true,
+  },
 });
 
 onMounted(async () => {
-  lesson.value = lessons_data.lessons.find(lesson => parseInt(lesson.id) === props.id);
-  if (!lesson.value) return;
+  await loadCode(props.id);
+  initMonaco();
 
-  const res = await fetch(`/py/${lesson.value.id}_sol.py`);
-  solution = await res.text();
-  code.value = solution.split("\n")[0];
+  worker = new Worker(new URL('@/scripts/initializer.js', import.meta.url), { type: 'module' });
 
-  await initPyodide();
-  await initMonaco();
+  worker.onmessage = (e) => {
+    const { type, payload } = e.data;
+    if (type === 'ready') isLoading.value = false;
+    else if (type === 'out') output.value.push({ type: 'text-black', text: payload });
+    else if (type === 'err') output.value.push({ type: 'text-red-500', text: payload });
+    else if (type === 'done') isRunning.value = false;
+
+    scrollToBottom();
+  }
+
+  worker.postMessage({ type: 'setup', payload: { id: props.id } });
 });
 
-async function initPyodide() {
-  pyodide = await loadPyodide({
-    stdout: (s) => (console.log(s), output.value += s + "\n"),
-    stderr: (s) => (output.value += s + "\n"),
-  });
-  console.log("Pyodide initialized!");
-  isLoading.value = false;
-  pyodide.setStdout({
-    batched: (msg) => {
-      output.value += msg;
-    },
-  });
-  pyodide.setStderr({
-    batched: (msg) => {
-      output.value += "Error: " + msg;
-    },
-  });
-}
-
-async function initMonaco() {
+function initMonaco() {
   monaco.editor.defineTheme("my", {
     base: 'vs',
     inherit: true,
@@ -65,24 +56,26 @@ async function initMonaco() {
   });
 }
 
-async function runCode() {
-  output.value = "";
-  isRunning.value = true;
-  try {
-    await pyodide.runPythonAsync(code.value);
-  } catch (err) {} 
-  finally {
-    isRunning.value = false;
-    const term = document.querySelector("#terminal");
-    if (term) term.scrollTop = term.scrollHeight;
-  }
+function scrollToBottom() {
+  const terminal = document.getElementById("terminal");
+  terminal.scrollTop = terminal.scrollHeight;
 }
 
-const editorOptions = {
-  fontSize: 12,
-  minimap: { enabled: false },
-  automaticLayout: true,
-};
+async function loadCode(id) {
+  let lesson = lessons_data.lessons.find(l => parseInt(l.id) === id);
+  if (!lesson) return;
+
+  const res = await fetch(`/py/${lesson.id}_sol.py`);
+  solution.value = await res.text();
+  code.value = solution.value.split("\n")[0];
+}
+
+function runCode() {
+  if (isRunning.value) return;
+  output.value = [];
+  isRunning.value = true;
+  worker.postMessage({ type: "run", payload: { code: code.value } });
+}
 </script>
 
 <template>
@@ -103,7 +96,7 @@ const editorOptions = {
           <template #top>
             <div class="h-full overflow-hidden rounded-xl border shadow-inner">
               <CodeEditor
-                class="py-3"
+                class="py-3 h-full"
                 v-model:value="code"
                 language="python"
                 theme="my"
@@ -112,9 +105,11 @@ const editorOptions = {
             </div>
           </template>
           <template #bottom>
-            <pre style="white-space: pre;" id="terminal" class="h-full font-mono p-4 rounded-xl shadow-inner border overflow-scroll">
-              {{ output }}
-            </pre>
+            <div class="w-full h-full relative">
+              <div id="terminal" class="absolute top-0 bottom-0 left-0 right-0 font-mono p-4 rounded-xl shadow-inner border overflow-auto">
+                <pre v-for="(line, index) in output" :key="index" :class="line.type">{{ line.text }}</pre>
+              </div>
+            </div>
           </template>
         </DragRow>
         

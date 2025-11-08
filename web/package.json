@@ -19,7 +19,7 @@
     "markdown-it": "^14.1.0",
     "markdown-it-mathjax3": "^5.2.0",
     "monaco-editor": "^0.53.0",
-    "monaco-editor-vue3": "^1.0.3",
+    "monaco-editor-vue3": "^1.0.4",
     "primeicons": "^7.0.0",
     "prismjs": "^1.30.0",
     "pyodide": "^0.28.2",
