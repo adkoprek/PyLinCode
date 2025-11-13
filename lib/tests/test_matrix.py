@@ -145,7 +145,7 @@ def load_mat_trans():
 @pytest.mark.parametrize("test_case", load_mat_ide())
 def test_mat_ide(test_case: MatIdeTestCase):
     result = mat_ide(test_case.size)
-    np.testing.assert_allclose(result, test_case.result)
+    np.testing.assert_allclose(result, test_case.result, atol=0)
 
 @pytest.mark.parametrize("test_case", load_mat_siz())
 def test_mat_siz(test_case: MatSizTestCase):
@@ -155,12 +155,12 @@ def test_mat_siz(test_case: MatSizTestCase):
 @pytest.mark.parametrize("test_case", load_mat_col())
 def test_mat_col(test_case: MatColTestCase):
     result = mat_col(test_case.a, test_case.col_index)
-    np.testing.assert_allclose(result, test_case.result)
+    np.testing.assert_allclose(result, test_case.result, atol=0)
 
 @pytest.mark.parametrize("test_case", load_mat_row())
 def test_mat_row(test_case: MatRowTestCase):
     result = mat_row(test_case.a, test_case.row_index)
-    np.testing.assert_allclose(result, test_case.result)
+    np.testing.assert_allclose(result, test_case.result, atol=0)
 
 @pytest.mark.parametrize("test_case", load_mat_add())
 def test_mat_add(test_case: MatAddTestCase):
@@ -170,7 +170,7 @@ def test_mat_add(test_case: MatAddTestCase):
 
     else:
         result = mat_add(test_case.a, test_case.b)
-        np.testing.assert_allclose(result, test_case.result)
+        np.testing.assert_allclose(result, test_case.result, atol=0)
 
 @pytest.mark.parametrize("test_case", load_mat_mul())
 def test_mat_mul(test_case: MatMulTestCase):
@@ -180,15 +180,15 @@ def test_mat_mul(test_case: MatMulTestCase):
 
     else:
         result = mat_mul(test_case.a, test_case.b)
-        np.testing.assert_allclose(result, test_case.result)
+        np.testing.assert_allclose(result, test_case.result, atol=0)
 
 @pytest.mark.parametrize("test_case", load_mat_scl())
 def test_mat_scl(test_case: MatSclTestCase):
     result = mat_scl(test_case.a, test_case.s)
-    np.testing.assert_allclose(result, test_case.result)
+    np.testing.assert_allclose(result, test_case.result, atol=0)
 
 @pytest.mark.parametrize("test_case", load_mat_trans())
 def test_mat_trans(test_case: MatTransTestCase):
     result = mat_tra(test_case.a)
-    np.testing.assert_allclose(result, test_case.result)
+    np.testing.assert_allclose(result, test_case.result, atol=0)
 

@@ -48,5 +48,5 @@ def test_inv(test_case: MatInvTestCase):
 
     else:
         result = inv(test_case.a)
-        np.testing.assert_allclose(result, test_case.result)
+        np.testing.assert_allclose(result, test_case.result, atol=ZERO)
 

@@ -36,4 +36,4 @@ def test_mat_vec_mul(test_case: MatVecMulTestCase):
 
     else:
         result = mat_vec_mul(test_case.a, test_case.v)
-        np.testing.assert_allclose(result, test_case.result)
+        np.testing.assert_allclose(result, test_case.result, atol=0)

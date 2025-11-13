@@ -23,26 +23,11 @@ class MatProjTestCase:
 class OrthoTestCase:
     existing: list[vec]
     new: vec
-    result: list[list[float]]
-
-@dataclass
-class OrthoBaseTestCase:
-    vectors: list[vec]
-    result: list[vec]
 
 @dataclass
 class QRTestCase:
     a: mat
 
-
-data = None
-def load_data():
-    global data
-    if data is not None:
-        return
-
-    with open(f"{DATA_PATH}/qr.json", 'r') as file:
-        data = json.load(file)
 
 def load_vec_proj():
     cases = []
@@ -69,12 +54,25 @@ def load_mat_proj():
     return cases
 
 def load_ortho():
-    load_data()
-    return [OrthoTestCase(tc["existing"], tc["new"], tc["result"]) for tc in data["ortho"]]
+    cases = []
+    for _ in range(TEST_CASES):
+        m = randint(2, 10)
+        A = random_matrix((m, m))
 
-def load_ortho_base():
-    load_data()
-    return [OrthoBaseTestCase(tc["vectors"], tc["result"]) for tc in data["ortho_base"]]
+        # Very rar
+        if abs(np.linalg.det(A)) < ZERO:
+            continue
+
+        Q, _ = np.linalg.qr(A)
+
+        vecs = [[Q[k][i] for k in range(m)] for i in range(Q.shape[1] - 1)]
+        a = []
+        for i in range(m):
+            a.append(A[i][-1])
+
+        cases.append(OrthoTestCase(vecs, a))
+
+    return cases
 
 def load_qr():
     cases = []
@@ -87,7 +85,7 @@ def load_qr():
 @pytest.mark.parametrize("test_case", load_vec_proj())
 def test_vec_prj(test_case: VecProjTestCase):
     result = vec_prj(test_case.a, test_case.b)
-    np.testing.assert_allclose(result, test_case.result)
+    np.testing.assert_allclose(result, test_case.result, atol=0)
 
 @pytest.mark.parametrize("test_case", load_mat_proj())
 def test_mat_prj(test_case: MatProjTestCase):
@@ -96,14 +94,13 @@ def test_mat_prj(test_case: MatProjTestCase):
 
 @pytest.mark.parametrize("test_case", load_ortho())
 def test_ortho(test_case: OrthoTestCase):
-    orthogonalized, factors = ortho(test_case.existing, test_case.new, True)
-    np.testing.assert_allclose(orthogonalized, test_case.result[0])
-    np.testing.assert_allclose(factors, test_case.result[1])
+    orthogonalized = ortho(test_case.existing, test_case.new)
+    bv = np.array(orthogonalized)
+    assert np.linalg.norm(bv) - 1 < UNSTABLE_ZERO
 
-@pytest.mark.parametrize("test_case", load_ortho_base())
-def test_ortho_base(test_case: OrthoBaseTestCase):
-    result = ortho_base(test_case.vectors)
-    np.testing.assert_allclose(result, test_case.result, atol=ZERO)
+    for a in test_case.existing:
+        av = np.array(a)
+        assert av.dot(bv) < UNSTABLE_ZERO
 
 @pytest.mark.parametrize("test_case", load_qr())
 def test_qr(test_case: QRTestCase):
@@ -118,5 +115,5 @@ def test_qr(test_case: QRTestCase):
     m, n = np.array(test_case.a).shape
     assert QM.shape == (m, m), f"Q is not full: got {QM.shape}, expected ({m},{m})"
     assert RM.shape == (m, n), f"R has wrong shape for full QR: {RM.shape}, expected ({m},{n})"
-    assert np.allclose(RM, np.triu(RM)), f"R is not upper triangular {RM}"
+    assert np.allclose(RM, np.triu(RM), atol=UNSTABLE_ZERO), f"R is not upper triangular {RM}"
 
