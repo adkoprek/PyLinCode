@@ -2,20 +2,18 @@
 
 ## UI
 
-### Switching Lessons
+### Test Scripts
 
-Switching a lesson does not work until page gets reloaded
+Create scripts that can be run to test a solution
+
+### Sol Button
+
+Create a button to get a solution after writing a text if one struggles
+
+### Storing
+
+Store the content
 
 ## Lib
 
-### vec_prj test
-
-Not using error tests
-
-### ortho test
-
-Not using error tests and not randomizing tests
-
-### ortho_base
-
-Not randomaizing tests
+Done

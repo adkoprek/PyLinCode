@@ -116,18 +116,12 @@
         },
         {
             "id": 20,
-            "title": "ortho_base",
-            "description": "",
-            "file": "qr.py"
-        },
-        {
-            "id": 21,
             "title": "qr",
             "description": "",
             "file": "qr.py"
         },
         {
-            "id": 22,
+            "id": 21,
             "title": "det",
             "description": "",
             "file": "determinant.py"

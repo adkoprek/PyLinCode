@@ -1,7 +1,30 @@
-def ortho_base(vecs: list[vec]) -> tuple[vec]:
-    result = [copy(vecs[0])]
-    
-    for i in range(1, len(vecs)):
-        result.append(ortho(result, vecs[i]))
+def det(a: mat) -> float:
+    rows, cols = mat_siz(a)
+    if rows != cols:
+        raise ShapeMismatchedError(f"The number of cols ({cols}) and the number of rows ({rows})")
 
-    return tuple(result)
+    _, U, P = lu(a)
+
+    det = 1
+
+    for i in range(rows):
+        det *= U[i][i]
+
+    p = []
+    for i in range(rows):
+         p.append(mat_row(P, i).index(1))
+
+    visited = [False]*rows
+    cycles = 0
+    for i in range(rows):
+        if not visited[i]:
+            cycles += 1
+            j = i
+            while not visited[j]:
+                visited[j] = True
+                j = p[j]
+
+    sign = 1 if ((rows - cycles) % 2 == 0) else -1
+    det *= sign
+
+    return det

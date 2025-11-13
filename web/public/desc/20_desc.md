@@ -1,38 +1,55 @@
-# ortho_base
+# qr
 
 ## Task
-Create a function named `ortho_base` that takes a list of linearly independent vectors as its argument and returns a tuple of mutually orthogonal vectors that span the same space using the Gram-Schmidt process.
+Create a function named `qr` that takes a matrix as its argument and returns its QR decomposition using the Householder reflection method. The function returns a tuple of two matrices: Q (orthogonal matrix) and R (upper triangular matrix), such that $A = QR$.
 
 ## Input
-- `vecs: list[vec]` - List of linearly independent vectors
+- `a: mat` - Input matrix
 
 ## Output
-- `tuple[vec]` - Tuple of mutually orthogonal vectors
+- `tuple[mat, mat]` - Tuple containing (Q, R) matrices
 
 ## Theory
-The Gram-Schmidt process converts a set of linearly independent vectors into a set of mutually orthogonal vectors that span the same space.
+The QR decomposition factors a matrix $A$ into the product of an orthogonal matrix $Q$ and an upper triangular matrix $R$, such that $A = QR$. The Householder reflection method achieves this by applying a sequence of orthogonal transformations to progressively zero out elements below the diagonal.
 
-**Steps:**
-1. Keep the first vector unchanged: $\mathbf{u}_1 = \mathbf{v}_1$
-2. For each subsequent vector $\mathbf{v}_i$ (where $i = 2, 3, \ldots, n$):
-   - Use the `ortho` function to remove all components parallel to the previously computed orthogonal vectors $\{\mathbf{u}_1, \mathbf{u}_2, \ldots, \mathbf{u}_{i-1}\}$
-   - The result is $\mathbf{u}_i$, which is orthogonal to all previous vectors
-3. Return the tuple of orthogonal vectors $(\mathbf{u}_1, \mathbf{u}_2, \ldots, \mathbf{u}_n)$
+**Householder Reflection Steps:**
+
+For each column $i$ (from 0 to $\min(m-1, n)$):
+
+1. Extract the subvector $\mathbf{x}$ from column $i$ starting at row $i$
+2. Compute its length: $\|\mathbf{x}\|$
+3. Determine the sign for numerical stability and compute:
+   $$\alpha = -\text{sign}(x_0) \cdot \|\mathbf{x}\|$$
+4. Create the reflection vector:
+   $$\mathbf{u} = \mathbf{x} - \alpha \mathbf{e}_1$$
+   where $\mathbf{e}_1 = (1, 0, 0, \ldots)$
+5. Normalize: $\mathbf{v} = \frac{\mathbf{u}}{\|\mathbf{u}\|}$
+6. Construct the Householder matrix:
+   $$H = I - 2\mathbf{v}\mathbf{v}^T$$
+7. Update: $R \leftarrow HR$ and $Q \leftarrow QH^T$
+
+The resulting $Q$ is orthogonal ($Q^TQ = I$) and $R$ is upper triangular.
 
 ## Example
 $$
-\text{Input: } \left\{\begin{pmatrix} 1 \\ 0 \end{pmatrix}, \begin{pmatrix} 1 \\ 1 \end{pmatrix}\right\} \quad \Rightarrow \quad \text{Output: } \left(\begin{pmatrix} 1 \\ 0 \end{pmatrix}, \begin{pmatrix} 0 \\ 1 \end{pmatrix}\right)
+\begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix} \rightarrow
+Q = \begin{pmatrix} 0.707 & 0.707 \\ 0.707 & -0.707 \end{pmatrix}, 
+R = \begin{pmatrix} 1.414 & 0.707 \\ 0 & 0.707 \end{pmatrix}
 $$
 
 ## Test
 ```python
-vecs: list[vec] = [[1, 0], [1, 1]]
-result = ortho_base(vecs)
-np.testing.assert_allclose(result[0], [1, 0], atol=1e-10)
-np.testing.assert_allclose(result[1], [0, 1], atol=1e-10)
+a: mat = [[1, 1], [1, 0]]
+Q, R = qr(a)
+m, n = len(a), len(a[0])
+assert Q.shape == (m, m), f"Q must be shape ({m}, {m})"
+assert R.shape == (m, n), f"R must be shape ({m}, {n})"
+np.testing.assert_allclose(Q @ Q.T, np.eye(m), atol=1e-10)
+np.testing.assert_allclose(Q @ R, a, atol=1e-10)
+assert np.allclose(R, np.triu(R)), "R is not upper triangular"
 ```
 
 ## Cases
 -   Test Cases: $50$
--   Dimension: $1$ to $10$
+-   Dimension: $1$ to $10$ (rows and columns)
 -   Tolerance: $1e-10$

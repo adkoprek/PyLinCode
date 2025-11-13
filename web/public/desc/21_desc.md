@@ -1,55 +1,65 @@
-# qr
+# det
 
 ## Task
-Create a function named `qr` that takes a matrix as its argument and returns its QR decomposition using the Householder reflection method. The function returns a tuple of two matrices: Q (orthogonal matrix) and R (upper triangular matrix), such that $A = QR$.
+Create a function named `det` that takes a matrix as its argument and returns its determinant using LU decomposition. If the matrix is not square, your function must raise a `ShapeMismatchedError`.
 
 ## Input
-- `a: mat` - Input matrix
+- `a: mat` - Input matrix (must be square)
 
 ## Output
-- `tuple[mat, mat]` - Tuple containing (Q, R) matrices
+- `float` - Determinant of the input matrix
 
 ## Theory
-The QR decomposition factors a matrix $A$ into the product of an orthogonal matrix $Q$ and an upper triangular matrix $R$, such that $A = QR$. The Householder reflection method achieves this by applying a sequence of orthogonal transformations to progressively zero out elements below the diagonal.
+The determinant can be efficiently computed using LU decomposition with partial pivoting. Given $PA = LU$, the determinant is:
 
-**Householder Reflection Steps:**
+$$
+\det(A) = \det(P^{-1}LU) = \det(P^{-1}) \cdot \det(L) \cdot \det(U)
+$$
 
-For each column $i$ (from 0 to $\min(m-1, n)$):
+Since:
+- $\det(L) = 1$ (L has ones on the diagonal)
+- $\det(U) = \prod_{i=1}^{n} U_{ii}$ (product of diagonal elements)
+- $\det(P^{-1}) = \det(P^T) = \det(P) = (-1)^{\text{number of swaps}}$
 
-1. Extract the subvector $\mathbf{x}$ from column $i$ starting at row $i$
-2. Compute its length: $\|\mathbf{x}\|$
-3. Determine the sign for numerical stability and compute:
-   $$\alpha = -\text{sign}(x_0) \cdot \|\mathbf{x}\|$$
-4. Create the reflection vector:
-   $$\mathbf{u} = \mathbf{x} - \alpha \mathbf{e}_1$$
-   where $\mathbf{e}_1 = (1, 0, 0, \ldots)$
-5. Normalize: $\mathbf{v} = \frac{\mathbf{u}}{\|\mathbf{u}\|}$
-6. Construct the Householder matrix:
-   $$H = I - 2\mathbf{v}\mathbf{v}^T$$
-7. Update: $R \leftarrow HR$ and $Q \leftarrow QH^T$
+**Steps:**
 
-The resulting $Q$ is orthogonal ($Q^TQ = I$) and $R$ is upper triangular.
+1. Verify that $A$ is square. If not, raise `ShapeMismatchedError`.
+2. Compute the LU decomposition: $(L, U, P) = \text{lu}(A)$
+3. Compute $\det(U)$ as the product of diagonal elements: $\prod_{i=0}^{n-1} U_{ii}$
+4. Determine the sign from the permutation matrix $P$:
+
+**Computing the Sign of P:**
+
+The sign of a permutation equals $(-1)^{\text{number of transpositions}}$. We can compute this using cycle decomposition:
+
+- Convert the permutation matrix to a permutation array: for each row $i$, find which column contains the 1, giving $p[i]$
+- Count the number of disjoint cycles in the permutation:
+  - Start with all positions unvisited
+  - For each unvisited position $i$:
+    * Increment cycle count
+    * Follow the chain: $i \to p[i] \to p[p[i]] \to \ldots$ until returning to $i$
+    * Mark all positions in this cycle as visited
+- The number of transpositions = $n - \text{number of cycles}$
+- Sign = $(-1)^{n - \text{cycles}}$
+
+**Example:** For $P = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 1 & 0 & 0 \end{pmatrix}$, the permutation is $p = [1, 2, 0]$. This forms one cycle: $0 \to 1 \to 2 \to 0$. So cycles = 1, and sign = $(-1)^{3-1} = 1$.
+
+5. Return: $\det(A) = \text{sign} \times \det(U)$
 
 ## Example
 $$
-\begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix} \rightarrow
-Q = \begin{pmatrix} 0.707 & 0.707 \\ 0.707 & -0.707 \end{pmatrix}, 
-R = \begin{pmatrix} 1.414 & 0.707 \\ 0 & 0.707 \end{pmatrix}
+\det\begin{pmatrix} 2 & 1 \\ 1 & 3 \end{pmatrix} = 6 - 1 = 5
 $$
 
 ## Test
 ```python
-a: mat = [[1, 1], [1, 0]]
-Q, R = qr(a)
-m, n = len(a), len(a[0])
-assert Q.shape == (m, m), f"Q must be shape ({m}, {m})"
-assert R.shape == (m, n), f"R must be shape ({m}, {n})"
-np.testing.assert_allclose(Q @ Q.T, np.eye(m), atol=1e-10)
-np.testing.assert_allclose(Q @ R, a, atol=1e-10)
-assert np.allclose(R, np.triu(R)), "R is not upper triangular"
+a: mat = [[2, 1], [1, 3]]
+result = det(a)
+np.testing.assert_allclose(result, 5, atol=1e-14)
 ```
 
 ## Cases
 -   Test Cases: $50$
+-   Error Test Cases: $5$
 -   Dimension: $1$ to $10$ (rows and columns)
--   Tolerance: $1e-10$
+-   Tolerance: $1e-14$
