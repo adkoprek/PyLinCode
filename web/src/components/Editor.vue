@@ -3,8 +3,10 @@ import { CodeEditor } from "monaco-editor-vue3";
 import { VueSpinnerIos } from "vue3-spinners";
 import DragRow from "vue-resizer/DragRow.vue";
 import * as monaco from "monaco-editor";
-import { ref, onMounted, watch, watchEffect } from "vue";
+import { ref, onMounted, watchEffect } from "vue";
 import lessons_data from "@/assets/lessons.json"
+import SolutionChallange from "./SolutionChallange.vue";
+import Solution from "./Solution.vue";
 
 const editorOptions = {
   automaticLayout: true,
@@ -13,12 +15,15 @@ const editorOptions = {
 };
 
 const code = ref("");
-const solution = ref("");
 const output = ref([]);
 const isRunning = ref(false);
 const isLoading = ref(false);
+const showChallenge = ref(false);
+const showSolution = ref(false);
+let solution = "";
 let loaded = false;
 let worker = null;
+let challanged = false;
 
 const props = defineProps({
   id: {
@@ -70,12 +75,11 @@ async function loadCode(id) {
   if (!lesson) return;
 
   const res = await fetch(`/py/${lesson.id}_sol.py`);
-  solution.value = await res.text();
-  code.value = solution.value.split("\n")[0];
+  solution = await res.text();
+  code.value = solution.split("\n")[0];
 }
 
 function runCode() {
-  /* Load environment on first run */
   if (!loaded) {
     isLoading.value = true;
     worker.postMessage({ type: 'setup', payload: { id: props.id } });
@@ -88,6 +92,14 @@ function runCode() {
   worker.postMessage({ type: "run", payload: { code: code.value } });
 }
 
+function toggleSolution() {
+  if (!challanged) {
+    showChallenge.value = true;
+    return;
+  }
+  showSolution.value = true;
+}
+
 watchEffect(async () => {
   await loadCode(props.id);
   output.value = [];
@@ -97,6 +109,14 @@ watchEffect(async () => {
 
 <template>
   <div class="w-full h-full flex pr-6 pl-2 py-6">
+    <SolutionChallange 
+      v-if="showChallenge"
+      @complete="showChallenge = false; challanged = true; toggleSolution()"
+      @close="showChallenge = false"/>
+    <Solution 
+      v-if="showSolution" 
+      :code="solution" 
+      @close="showSolution = false"/> 
     <div
       class="w-full bg-white rounded-2xl shadow-xl p-6 flex flex-col">
       <div class="flex flex-col flex-1 h-screen">
@@ -129,7 +149,12 @@ watchEffect(async () => {
           </template>
         </DragRow>
         
-        <div class="flex justify-end mt-3">
+        <div class="flex justify-between mt-3">
+          <button
+            @click="toggleSolution"
+            class="px-6 py-2 bg-transparent rounded-xl shadow hover:bg-indigo-700 hover:text-white border-2 border-indigo-700 disabled:opacity-50 transition">
+            Show Solution
+          </button>
           <button
             @click="runCode"
             class="px-6 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 disabled:opacity-50 transition"
