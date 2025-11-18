@@ -1,4 +1,4 @@
-import { loadPyodide } from "pyodide";
+import { loadPyodide, FS } from "pyodide";
 
 
 // Internal variables
@@ -30,4 +30,8 @@ async function runCode(code) {
     const output = err + "\n";
     self.postMessage({ type: "err", payload: output });
   } 
+}
+
+async function test1(code) {
+  FS.writeFile("/")
 }
