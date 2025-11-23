@@ -6,6 +6,7 @@ import Editor from '@/components/Editor.vue';
 import DragCol from "vue-resizer/DragCol.vue";
 import Sidebar from '@/components/SideBar.vue';
 import lessons_data from "../assets/lessons.json";
+import SubmissionsSideBar from '@/components/SubmissionsSideBar.vue';
 
 const props = defineProps({
     id: {
@@ -41,5 +42,6 @@ watchEffect(() => {
                 <Editor :id="lesson.id"/>
             </template>
         </DragCol>
+        <SubmissionsSideBar :id="lesson.id" class="bg-"/>
     </div>
 </template>

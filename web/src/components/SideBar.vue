@@ -23,17 +23,17 @@ defineProps({
 </script>
 
 <template>
-  <div class="flex z-30 overflow-scroll">
+  <div :class="[
+      'flex z-30 overflow-scroll wrapper',
+      isOpen ? 'border-r-1 border-black' : ''
+    ]">
     <div
       :class="[
         'text-gray-50 transition-all duration-400',
-        isOpen ? 'w-64' : 'w-16',
+        isOpen ? 'w-50' : 'w-16',
       ]">
       <button
-        :class="[
-          'p-4 w-full flex justify-center transition rounded-b-none text-gray-700',
-           isOpen ? 'hover:bg-indigo-500' : 'hover:text-indigo-600'
-        ]"
+        class="p-4 w-full flex justify-center transition rounded-b-none text-gray-700 hover:bg-indigo-500 hover:text-white"
         @click="isOpen = !isOpen">
         ☰
       </button>
@@ -74,3 +74,14 @@ defineProps({
     </div>
   </div>
 </template>
+
+<style>
+.wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.wrapper {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;
+}
+</style>

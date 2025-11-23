@@ -7,7 +7,7 @@ import { ref, onMounted, watchEffect } from "vue";
 import lessons_data from "@/assets/lessons.json"
 import SolutionChallange from "./SolutionChallange.vue";
 import Solution from "./Solution.vue";
-import { getLocks, initDatabase, lockRange, clearLocks } from "@/scripts/db";
+import { getLocks, initDatabase, lockRange } from "@/scripts/db";
 
 
 const editorOptions = {
@@ -36,17 +36,21 @@ const props = defineProps({
 
 onMounted(async () => {
   await initDatabase();
-  await clearLocks();
+  await initLocks();
+  initMonaco();
+  initPyodite();
+});
+
+async function initLocks() {
   const locks = await getLocks();
   lessons_data.lessons.sort((a, b) => a.id - b.id)
   const maxId = lessons_data.lessons.reduce((max, obj) => Math.max(max, obj.id), 0)
   if (!locks.lenght) {
     await lockRange(2, maxId)
   }
+}
 
-  initMonaco();
-
-  console.log(await getLocks());
+function initPyodite() {
   worker = new Worker(new URL('@/scripts/initializer.js', import.meta.url), { type: 'module' });
 
   worker.onmessage = (e) => {
@@ -62,7 +66,7 @@ onMounted(async () => {
 
     scrollToBottom();
   }
-});
+}
 
 function initMonaco() {
   monaco.editor.defineTheme("my", {
