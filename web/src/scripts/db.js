@@ -51,6 +51,10 @@ export async function initDatabase() {
     }
 }
 
+export function dbExists() {
+    return connected;
+}
+
 /******************************* Locks *******************************************/
 export async function getLocks() {
     return await database.locked.find().exec()
@@ -99,13 +103,13 @@ export function subscribeToSubmissionInsert(callback) {
 
 /******************************* Current *******************************************/
 export async function getCurrentCode(lesson) {
-    await database.current.findOne({
+    return await database.current.findOne({
         selector: {
-            id: lesson
+            id: lesson.toString()
         }
-    });
+    }).exec();
 }
 
-export async function ChangeCurrent(lesson) {
+export async function changeCurrent(lesson) {
     await database.current.upsert(lesson)
 }

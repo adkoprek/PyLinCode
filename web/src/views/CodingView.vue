@@ -42,6 +42,5 @@ watchEffect(() => {
                 <Editor :id="lesson.id"/>
             </template>
         </DragCol>
-        <SubmissionsSideBar :id="lesson.id" class="bg-"/>
     </div>
 </template>

@@ -1,13 +1,14 @@
-<script setup>
+  <script setup>
 import { CodeEditor } from "monaco-editor-vue3";
 import { VueSpinnerIos } from "vue3-spinners";
 import DragRow from "vue-resizer/DragRow.vue";
 import * as monaco from "monaco-editor";
-import { ref, onMounted, watchEffect } from "vue";
+import { ref, onMounted, watchEffect, watch } from "vue";
 import lessons_data from "@/assets/lessons.json"
 import SolutionChallange from "./SolutionChallange.vue";
 import Solution from "./Solution.vue";
-import { getLocks, initDatabase, lockRange } from "@/scripts/db";
+import { changeCurrent, dbExists, getCurrentCode, getLocks, initDatabase, lockRange } from "@/scripts/db";
+import debounce from "lodash.debounce";
 
 
 const editorOptions = {
@@ -36,10 +37,28 @@ const props = defineProps({
 
 onMounted(async () => {
   await initDatabase();
+  await loadCode(props.id);
   await initLocks();
   initMonaco();
   initPyodite();
 });
+
+watch(props, async () => {
+  await loadCode(props.id);
+  output.value = [];
+  loaded = false;
+})
+
+watch(code, () => {
+  const debounceFunc = debounce(async function () {
+    await changeCurrent({ id: props.id.toString(), code: code.value });
+  }, 500);
+  debounceFunc();
+});
+
+setInterval(async () => {
+  await changeCurrent({ id: props.id.toString(), code: code.value });
+}, 10000);
 
 async function initLocks() {
   const locks = await getLocks();
@@ -89,9 +108,17 @@ async function loadCode(id) {
   let lesson = lessons_data.lessons.find(l => parseInt(l.id) === id);
   if (!lesson) return;
 
-  const res = await fetch(`/py/${lesson.id}_sol.py`);
-  solution = await res.text();
-  code.value = solution.split("\n")[0];
+  const current = await getCurrentCode(id);
+  if (current == null) {
+    const res = await fetch(`/py/${lesson.id}_sol.py`);
+    solution = await res.text();
+    code.value = solution.split("\n")[0];
+  }
+  else {
+    console.log("Setting code from current", current.code);
+    code.value = current.code;
+  }
+  console.log("Code set to:", code.value);
 }
 
 function runCode() {
@@ -114,12 +141,6 @@ function toggleSolution() {
   }
   showSolution.value = true;
 }
-
-watchEffect(async () => {
-  await loadCode(props.id);
-  output.value = [];
-  loaded = false;
-});
 </script>
 
 <template>
