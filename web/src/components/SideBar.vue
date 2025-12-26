@@ -1,15 +1,20 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { RouterLink } from "vue-router";
 import lessons_data from "../assets/lessons.json";
-import { initDatabase, subscrbeToInsert, subscrbeToRemove } from "@/scripts/db";
+import { initDatabase, subscrbeToInsert, subscrbeToRemove, getLocks } from "@/scripts/db";
 
 const isOpen = ref(false);
-const locks = ref(new Set([2]));
+const locks = ref(new Set());
 const lessons = lessons_data.lessons;
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await initDatabase();
+  const rawLocks = await getLocks();
+  for (const lock of rawLocks) {
+    locks.value.add(parseInt(lock.id));
+  }
+
   subscrbeToInsert((id) => locks.value.add(parseInt(id)));
   subscrbeToRemove((id) => locks.value.delete(parseInt(id)))
 });

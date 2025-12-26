@@ -3,11 +3,11 @@ import { CodeEditor } from "monaco-editor-vue3";
 import { VueSpinnerIos } from "vue3-spinners";
 import DragRow from "vue-resizer/DragRow.vue";
 import * as monaco from "monaco-editor";
-import { ref, onMounted, watchEffect, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import lessons_data from "@/assets/lessons.json"
 import SolutionChallange from "./SolutionChallange.vue";
 import Solution from "./Solution.vue";
-import { changeCurrent, dbExists, getCurrentCode, getLocks, initDatabase, lockRange } from "@/scripts/db";
+import { changeCurrent, getCurrentCode, getLocks, initDatabase, lockRange } from "@/scripts/db";
 import debounce from "lodash.debounce";
 
 
@@ -64,7 +64,7 @@ async function initLocks() {
   const locks = await getLocks();
   lessons_data.lessons.sort((a, b) => a.id - b.id)
   const maxId = lessons_data.lessons.reduce((max, obj) => Math.max(max, obj.id), 0)
-  if (!locks.lenght) {
+  if (locks.length == 0) {
     await lockRange(2, maxId)
   }
 }
@@ -107,18 +107,17 @@ function scrollToBottom() {
 async function loadCode(id) {
   let lesson = lessons_data.lessons.find(l => parseInt(l.id) === id);
   if (!lesson) return;
+  
+  const res = await fetch(`/py/${lesson.id}_sol.py`);
+  solution = await res.text();
 
   const current = await getCurrentCode(id);
   if (current == null) {
-    const res = await fetch(`/py/${lesson.id}_sol.py`);
-    solution = await res.text();
     code.value = solution.split("\n")[0];
   }
   else {
-    console.log("Setting code from current", current.code);
     code.value = current.code;
   }
-  console.log("Code set to:", code.value);
 }
 
 function runCode() {
