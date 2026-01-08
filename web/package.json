@@ -23,7 +23,7 @@
     "monaco-editor-vue3": "^1.0.4",
     "primeicons": "^7.0.0",
     "prismjs": "^1.30.0",
-    "pyodide": "^0.28.2",
+    "pyodide": "^0.29.1",
     "rxdb": "^16.20.0",
     "rxjs": "^7.8.2",
     "uuid": "^13.0.0",

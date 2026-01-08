@@ -70,7 +70,7 @@ async function initLocks() {
 }
 
 function initPyodite() {
-  worker = new Worker(new URL('@/scripts/initializer.js', import.meta.url), { type: 'module' });
+  worker = new Worker(new URL('@/scripts/python.js', import.meta.url), { type: 'module' });
 
   worker.onmessage = (e) => {
     const { type, payload } = e.data;
@@ -130,7 +130,7 @@ function runCode() {
   if (isRunning.value) return;
   output.value = [];
   isRunning.value = true;
-  worker.postMessage({ type: "run", payload: { code: code.value } });
+  worker.postMessage({ type: "run", payload: { code: code.value, id: props.id } });
 }
 
 function toggleSolution() {

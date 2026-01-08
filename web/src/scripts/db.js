@@ -25,7 +25,6 @@ export async function initDatabase() {
             }
             check();
         });
-        return
     }
 
     if (!connected) {

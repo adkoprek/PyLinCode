@@ -1,0 +1,31 @@
+# tests/lesson_5_vec_nor.py
+import numpy as np
+from dataclasses import dataclass
+
+from tests.consts import *
+from src.vec_add import vec_add
+from src.vec_dot import vec_dot
+from src.vec_scl import vec_scl
+from src.vec_len import vec_len
+from src.vec_nor import vec_nor
+from src.types import vec
+
+
+@dataclass
+class Case:
+    a: vec
+    result: vec
+
+
+def load_cases():
+    return [
+        Case(a := random_vector(), a / np.linalg.norm(a))
+        for _ in range(TEST_CASES)
+    ]
+
+
+def run():
+    for c in load_cases():
+        r = vec_nor(c.a)
+        np.testing.assert_allclose(r, c.result, atol=1e-10)
+        np.testing.assert_allclose(vec_len(r), 1.0, atol=1e-10)
