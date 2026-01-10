@@ -1,5 +1,5 @@
 import lessons from "@/assets/lessons.json";
-import { getCurrentCode } from "./db";
+import { getCurrentCode, initDatabase } from "./db";
 import { loadPyodide } from "pyodide"
 
 let pyodide = null;
@@ -33,7 +33,8 @@ async function initPyodide(lesson) {
 
 async function loadPreviousLessons(lesson) {
   for (let i = 1; i < lesson; i++) {
-    const code = await getCurrentCode(i);
+    await initDatabase();
+    const code = addImports((await getCurrentCode(i)).code);
     const lessonName = lessons.lessons[i - 1].title;
     const fileName = `/src/${lessonName}.py`;
     pyodide.FS.writeFile(fileName, code, { encoding: "utf8" });
@@ -61,13 +62,16 @@ async function loadTest(lesson) {
   pyodide.FS.writeFile(fileName, code, { encoding: "utf8" });
 }
 
+function addImports(code) {
+  return `from src.errors import ShapeMismatchedError
+from src.types import vec
+${code}`;
+}
+
 async function runCode(code, lesson) {
   const lessonName = lessons.lessons[lesson - 1].title;
   const fileName = `/src/${lessonName}.py`;
-  const codeImport = `
-from src.errors import ShapeMismatchedError
-from src.types import vec
-${code}`;
+  const codeImport = addImports(code);
   pyodide.FS.writeFile(fileName, codeImport, { encoding: "utf8" });
 
   try {

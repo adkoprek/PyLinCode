@@ -7,7 +7,7 @@ import { ref, onMounted, watch } from "vue";
 import lessons_data from "@/assets/lessons.json"
 import SolutionChallange from "./SolutionChallange.vue";
 import Solution from "./Solution.vue";
-import { changeCurrent, getCurrentCode, getLocks, initDatabase, lockRange } from "@/scripts/db";
+import { changeCurrent, getCurrentCode, getLocks, initDatabase, lockRange, clearLocks, deleteLock } from "@/scripts/db";
 import debounce from "lodash.debounce";
 
 
@@ -72,19 +72,30 @@ async function initLocks() {
 function initPyodite() {
   worker = new Worker(new URL('@/scripts/python.js', import.meta.url), { type: 'module' });
 
-  worker.onmessage = (e) => {
+  worker.onmessage = async (e) => {
     const { type, payload } = e.data;
     if (type === 'ready') {
       isLoading.value = false;
       loaded = true;
       runCode();
     }
-    else if (type === 'out') output.value.push({ type: 'text-black', text: payload });
+    else if (type === 'out') await nextLesson(payload);
     else if (type === 'err') output.value.push({ type: 'text-red-500', text: payload });
     else if (type === 'done') isRunning.value = false;
 
     scrollToBottom();
   }
+}
+
+async function nextLesson(payload) {
+  const locks = await getLocks();
+  const minLock = locks.reduce((min, obj) => Math.min(min, obj.id), 1e10);
+  const maxId = lessons_data.lessons.reduce((max, obj) => Math.max(max, obj.id), 0);
+
+  console.log(minLock + 1, props.id)
+  if (props.id == minLock - 1 && props.id != maxId) await deleteLock(minLock);
+
+  output.value.push({ type: 'text-black', text: payload });
 }
 
 function initMonaco() {

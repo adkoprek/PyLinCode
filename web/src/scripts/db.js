@@ -74,6 +74,16 @@ export async function lockRange(from, to) {
     }
 }
 
+
+export async function deleteLock(id) {
+    const lock = await database.locked.findOne({
+        selector: {
+            id: id.toString()
+        }
+    }).exec();
+    await lock.remove();
+}
+
 export function subscrbeToInsert(callback) {
     database.locked.insert$.subscribe(change => callback(change.documentId));
 }
