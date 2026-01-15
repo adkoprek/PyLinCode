@@ -2,13 +2,13 @@
 import { initDatabase, getSubmissions, subscribeToSubmissionInsert } from '@/scripts/db';
 import { onMounted, ref, watch } from 'vue';
 import Solution from './Solution.vue';
-import {v4 as uuid} from "uuid"
 
 
 const isOpen = ref(false);
 const submissions = ref([]);
 const overlay = ref(null);
 const code = ref('');
+
 const props = defineProps({
   id: {
     type: Number,
@@ -27,7 +27,7 @@ watch(() => props.id, async (newId) => {
 });
 
 async function submissionInsert(id) {
-    if (props.id == parseInt(id)) {
+    if (props.id == id) {
         submissions.value = await getSubmissions(props.id);
     }
 }

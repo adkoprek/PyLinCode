@@ -7,8 +7,9 @@ import { ref, onMounted, watch } from "vue";
 import lessons_data from "@/assets/lessons.json"
 import SolutionChallange from "./SolutionChallange.vue";
 import Solution from "./Solution.vue";
-import { changeCurrent, getCurrentCode, getLocks, initDatabase, lockRange, clearLocks, deleteLock } from "@/scripts/db";
+import { changeCurrent, getCurrentCode, getLocks, initDatabase, lockRange, clearLocks, deleteLock, addSubmition } from "@/scripts/db";
 import debounce from "lodash.debounce";
+import { v4 as uuidv4 } from "uuid";
 
 
 const editorOptions = {
@@ -92,8 +93,14 @@ async function nextLesson(payload) {
   const minLock = locks.reduce((min, obj) => Math.min(min, obj.id), 1e10);
   const maxId = lessons_data.lessons.reduce((max, obj) => Math.max(max, obj.id), 0);
 
-  console.log(minLock + 1, props.id)
   if (props.id == minLock - 1 && props.id != maxId) await deleteLock(minLock);
+
+  await addSubmition({
+    id: uuidv4(),
+    lessonId: props.id,
+    code: code.value,
+    timestamp: new Date().toISOString()
+  })
 
   output.value.push({ type: 'text-black', text: payload });
 }

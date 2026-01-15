@@ -107,7 +107,7 @@ export async function getSubmissions(lesson) {
 }
 
 export function subscribeToSubmissionInsert(callback) {
-    database.submissions.insert$.subscribe(change => callback(change.lessonId))
+    database.submissions.insert$.subscribe(change => callback(change.documentData.lessonId));
 }
 
 /******************************* Current *******************************************/
