@@ -2,7 +2,9 @@
 
 ## UI
 
-### Recreate locks
+### Release locks on update
+
+### Adjust descriptions
 
 ### Code does not update on rerun
 

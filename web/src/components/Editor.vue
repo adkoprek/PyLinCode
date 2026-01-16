@@ -24,10 +24,13 @@ const isRunning = ref(false);
 const isLoading = ref(false);
 const showChallenge = ref(false);
 const showSolution = ref(false);
+const showOverlay = ref(false);
 let solution = "";
 let loaded = false;
 let worker = null;
 let challanged = false;
+let oldLesson = false;
+let maxId;
 
 const props = defineProps({
   id: {
@@ -40,12 +43,14 @@ onMounted(async () => {
   await initDatabase();
   await loadCode(props.id);
   await initLocks();
+  await lockOverlay();
   initMonaco();
   initPyodite();
 });
 
 watch(props, async () => {
   await loadCode(props.id);
+  await lockOverlay();
   output.value = [];
   loaded = false;
 })
@@ -64,9 +69,20 @@ setInterval(async () => {
 async function initLocks() {
   const locks = await getLocks();
   lessons_data.lessons.sort((a, b) => a.id - b.id)
-  const maxId = lessons_data.lessons.reduce((max, obj) => Math.max(max, obj.id), 0)
+  maxId = lessons_data.lessons.reduce((max, obj) => Math.max(max, obj.id), 0)
+
   if (locks.length == 0) {
     await lockRange(2, maxId)
+  }
+}
+
+async function lockOverlay() {
+  showOverlay.value = false;
+  const locks = await getLocks();
+  const minLock = locks.reduce((min, obj) => Math.min(min, obj.id), 1e10);
+  if (minLock - 1 != props.id) { 
+    oldLesson = true;
+    showOverlay.value = true; 
   }
 }
 
@@ -91,9 +107,11 @@ function initPyodite() {
 async function nextLesson(payload) {
   const locks = await getLocks();
   const minLock = locks.reduce((min, obj) => Math.min(min, obj.id), 1e10);
-  const maxId = lessons_data.lessons.reduce((max, obj) => Math.max(max, obj.id), 0);
 
   if (props.id == minLock - 1 && props.id != maxId) await deleteLock(minLock);
+
+  oldLesson = true;
+  showOverlay.value = true;
 
   await addSubmition({
     id: uuidv4(),
@@ -175,7 +193,9 @@ function toggleSolution() {
       <div class="flex flex-col flex-1 h-screen">
         <DragRow class="flex-1" slider-bg-color="transparent" slider-bg-hover-color="trasparent" style="width: 100%;">
           <template #top>
-            <div class="h-full overflow-hidden rounded-xl border shadow-inner">
+            <!-- Editor wrapper -->
+            <div class="relative h-full overflow-hidden rounded-xl border shadow-inner">
+
               <CodeEditor
                 class="py-3 h-full"
                 v-model:value="code"
@@ -183,6 +203,35 @@ function toggleSolution() {
                 theme="my"
                 :options="editorOptions"
               />
+
+              <transition name="fade">
+                <div
+                  v-if="showOverlay"
+                  class="absolute inset-0 z-40
+                        flex items-center justify-center
+                        bg-black/40 backdrop-blur-sm"
+                >
+                  <div class="bg-white rounded-xl shadow-xl p-6 w-72 text-center space-y-4">
+                    <div class="text-lg font-semibold text-gray-800">
+                      Are you sure?
+                    </div>
+
+                    <div class="text-gray-600 text-sm">
+                      If you decide to edit this code all the future lessons will be locked
+                      because they might depend on this one. If you want to look at your code,
+                      check out the submissions on the right.
+                    </div>
+
+                    <button
+                      class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition"
+                      @click="async () => { lockRange(id + 1, maxId); showOverlay = false; }"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </div>
+              </transition>
+
             </div>
           </template>
           <template #bottom>
