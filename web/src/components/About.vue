@@ -20,11 +20,11 @@ import profile from '@/assets/profile.png';
         <h3 class="text-xl font-semibold text-gray-700 mb-2">Adam Koprek</h3>
         <p class="text-gray-600 leading-relaxed">
 
-            I'm a high school student and enjoy programming and math. 
-            In my first high school year I noticed that most advanced programming uses linear algebra.
-            So I took the 18.06 course from MIT taught by Gilbert Strang and started grinding.
-            After I have mastered the theory I decided that I should learn it by implementing a linear algebra library.
-            So I decided to make this library public on this website because there is so much to learn...
+          I'm a high school student who enjoys programming and mathematics.
+          In my first year of high school, I realized that most advanced programming relies heavily on linear algebra.
+          So I took MIT’s 18.06 course taught by Gilbert Strang and started grinding.
+          After mastering the theory, I decided to deepen my understanding by implementing a linear algebra library myself.
+          I chose to make this library public on this website, because there is still so much to learn — and learn best by building.
         </p>
       </div>
     </div>

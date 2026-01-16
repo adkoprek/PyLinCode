@@ -12,38 +12,33 @@ onMounted(() => {
 const manual_blocks = ref([
     {
         title: "Types",
-        desc: `
-            In your library you will be using premade custom types. 
-            These types include mat and vec as shown in the example. 
-            The mat type is a 2d-pthon list where every list is one row of a matrix
-            and the vetor is just a simple list of floating point numbers.`,
+        desc: `In this library, you will use pre-made custom types. These types include mat and vec, as shown in the example.
+
+          • The mat type is a 2D Python list where each inner list represents one row of a matrix.
+          • The vec type is a simple list of floating-point numbers.`,
         code: `
 mat = list[list[float]]
 vec = list[float]`
     },
     {
         title: "Errors",
-        desc: `
-            Your library should handle basic errors which will be tested. 
-            The custom errors made for this library are: 
-              • ShapeMismatchedError, when a shape of a matrix does not match
-              • SingularError, when a matrix is singular to machiene precision
-              • MaxIterationsError, when you exceed the amout of iterations when computing eigenvalues
-            Do not worry if you are not familliar with this terms, just remember where you can look them up
+        desc: `Your library should handle basic errors, which will be tested automatically.
+          The custom errors defined for this library are:
+
+          • ShapeMismatchedError — raised when the shape of a matrix does not match the expected shape
+          • SingularError — raised when a matrix is singular to machine precision
         `,
         code: `
 raise ShapeMismatchedError("Your custom message")
 raise SingularError("Your custom message")
-raise MaxIterationError("Your custom message")
         `
     },
     {
       title: "Function Setup",
-      desc: `
-        In every task you will get a short descripton, examples and theory. 
-        In addition to that you will be told which parameters your function gets and which are expected to be returned.
-        Then you write your code into the already provided empty function.
-        Do not change the the function!
+      desc: `For each task, you’ll get a short description, examples, and some theory.
+          You’ll also be told what parameters your function receives and what it should return.
+          Then, you’ll write your code inside the provided empty function.
+          Do not modify the function signature.
       `,
       code: `
 def lu(a: mat) -> tuple[mat, mat, mat]:
@@ -54,10 +49,9 @@ def lu(a: mat) -> tuple[mat, mat, mat]:
     },
     {
       title: "Array references",
-      desc: `
-        Be aware that your function must not change the parameters it recieves which will be checked.
-        Most of the inputs are python lists which are passed by referenc which means that you will cahnge the original matrix.
-        If would like to do changes on your matrix use the provided copy() function.
+      desc: `Be careful not to modify the input parameters of your function — this will be tested.
+          Most inputs are Python lists passed by reference, so changing them will also change the original matrix.
+          If you need to modify a matrix, make a copy first using the provided copy() function.
       `,
       code: `
 def lu(a: mat) -> tuple[mat, mat, mat]:
@@ -70,14 +64,14 @@ def lu(a: mat) -> tuple[mat, mat, mat]:
     },
     {
       title: "Reusability",
-      desc: `
-        In every function you can reuse the function that you have already implemented otherwise no other libraries are available to you.
+      desc: `In each function, you are allowed to reuse any functions you have already implemented.
+However, no other libraries are available.
       `,
       code: `
 def det(a: mat) -> float:
       P, L, U = lu(a)     # This is all right
 
-      # Compute the determinant usign P, L, U
+      # Compute the determinant using P, L, U
 
       return det
       `
@@ -97,7 +91,7 @@ def det(a: mat) -> float:
         {{ block.title }}
       </h3>
 
-      <p class="text-gray-700 text-base md:text-lg leading-relaxed">
+      <p  class="text-gray-700 text-base md:text-lg leading-relaxed whitespace-pre-line">
         {{ block.desc }}
       </p>
 

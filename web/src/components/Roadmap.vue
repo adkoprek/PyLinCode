@@ -33,11 +33,6 @@ export default {
           latex: "A^{-1}A = I",
         },
         {
-          title: "RREF",
-          desc: "Implement the rref function that is not even implemented in numpy!",
-          latex: "\\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\end{bmatrix}",
-        },
-        {
           title: "QR Decomposition",
           desc: "Implement the QR algorithem and learn householder reflections.",
           latex: "A = QR",
@@ -46,11 +41,6 @@ export default {
           title: "Determinant",
           desc: "Compute the determinant using the PA=LU decomposition.",
           latex: "\\det(A) = ad - bc",
-        },
-        {
-          title: "Eigenvalues",
-          desc: "Implement the brilliant eigenvalue algorithem. The eigenvectors are literally to complex.",
-          latex: "A\\vec{v} = \\lambda\\vec{v}",
         },
       ],
     };

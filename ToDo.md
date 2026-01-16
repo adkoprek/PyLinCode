@@ -10,6 +10,4 @@
 
 ### Error Handling
 
-## Lib
-
-Done
+### Check if input was altered and allow to use copy
