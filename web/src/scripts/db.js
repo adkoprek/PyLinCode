@@ -37,7 +37,7 @@ export async function initDatabase() {
         let storage = getRxStorageDexie();
         storage = wrappedValidateAjvStorage({ storage });
         database = await createRxDatabase({
-            name: 'lincode',
+            name: 'pylinalg',
             storage: storage
         });
 

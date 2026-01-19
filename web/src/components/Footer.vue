@@ -2,7 +2,7 @@
   <footer class="bg-gray-900 text-gray-200 py-12 mt-20">
     <div class="flex justify-around px-6">
       <div>
-        <h2 class="text-2xl font-bold text-white mb-3">LinCode</h2>
+        <h2 class="text-2xl font-bold text-white mb-3">PyLinAlg</h2>
         <p class="text-gray-400">
           Practice linear algebra concepts interactively, just like coding challenges.
         </p>
@@ -18,7 +18,7 @@
     </div>
 
     <div class="border-t border-gray-700 mt-10 pt-6 text-center text-gray-500 text-sm">
-      © {{ new Date().getFullYear() }} LinCode. All rights reserved.
+      © {{ new Date().getFullYear() }} PyLinAlg. All rights reserved.
     </div>
   </footer>
 </template>

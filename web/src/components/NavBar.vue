@@ -17,7 +17,7 @@ const isActiveLink = (routePath) => {
           <div class="w-8 h-8 rounded-xl">
               <img :src="logo" alt="Logo" class="w-full h-full object-cover" />
           </div>
-          <span class="font-bold text-2xl">LinCode</span>
+          <span class="font-bold text-2xl">PyLinAlg</span>
         </div>
       </RouterLink>
 
