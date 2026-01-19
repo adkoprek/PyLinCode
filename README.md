@@ -73,6 +73,14 @@ Don't forget to give the project a star! Thanks again!
 
 ## License
 
+### Third-party Licenses
+
+This project uses the following third-party packages:
+
+- caniuse-lite@1.0.30001743 (CC-BY-4.0) — [https://github.com/Fyrd/caniuse](https://github.com/Fyrd/caniuse)
+- type-fest@4.41.0 (CC-BY-4.0) — [https://github.com/sindresorhus/type-fest](https://github.com/sindresorhus/type-fest)
+
+
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 [HTML.js]: https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white
