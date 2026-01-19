@@ -6,6 +6,11 @@
         <p class="text-gray-400">
           Practice linear algebra concepts interactively, just like coding challenges.
         </p>
+
+        <h3 class="text-sm mt-9 font-bold text-white mb-3">Attributions</h3>
+        <p class="text-gray-400 text-sm">
+          Icon made by HAJICON from www.flaticon.com
+        </p>
       </div>
 
       <div>
