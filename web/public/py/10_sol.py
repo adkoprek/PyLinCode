@@ -1,7 +1,8 @@
-def mat_ide(size: int) -> mat:
-    result: mat = [[0 for _ in range(size)] for _ in range(size)]
+def mat_col(a: mat, index: int) -> vec:
+    cols, _ = mat_siz(a)
 
-    for i in range(size):
-        result[i][i] = 1
+    col: vec = []
+    for i in range(cols):
+        col.append(a[i][index])
 
-    return result
+    return col

@@ -1,36 +1,37 @@
-# mat_prj
+# vec_prj
 
 ## Task
-Create a function named `mat_prj` that takes a matrix as its argument and returns the projection matrix onto the column space of $A$.
+Create a function named `vec_prj` that takes two vectors as its arguments and returns the projection of vector $\mathbf{b}$ onto vector $\mathbf{a}$.
 
 ## Input
-- `a: mat` - Input matrix
+- `a: vec` - Vector to project onto
+- `b: vec` - Vector to be projected
 
 ## Output
-- `mat` - Projection matrix onto the column space of $A$
+- `vec` - Projection of $\mathbf{b}$ onto $\mathbf{a}$
 
 ## Theory
-The projection matrix $P$ that projects vectors onto the column space of matrix $A$ is given by:
+The projection of vector $\mathbf{b}$ onto vector $\mathbf{a}$ is given by:
 $$
-P = A(A^TA)^{-1}A^T
+\text{proj}_{\mathbf{a}}(\mathbf{b}) = \frac{\mathbf{a} \cdot \mathbf{b}}{\mathbf{a} \cdot \mathbf{a}} \mathbf{a}
 $$
 
-This matrix has the property that for any vector $\mathbf{b}$, the product $P\mathbf{b}$ gives the projection of $\mathbf{b}$ onto the column space of $A$.
-
+This formula computes the scalar factor $\frac{\mathbf{a} \cdot \mathbf{b}}{\mathbf{a} \cdot \mathbf{a}}$ and multiplies it by vector $\mathbf{a}$ to obtain the projection.
 
 ## Example
 $$
-A = \begin{pmatrix} 1 \\ 0 \end{pmatrix}, \quad P = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}
+\text{proj}_{\begin{pmatrix} 1 \\ 0 \end{pmatrix}}\begin{pmatrix} 3 \\ 4 \end{pmatrix} = \frac{3}{1} \begin{pmatrix} 1 \\ 0 \end{pmatrix} = \begin{pmatrix} 3 \\ 0 \end{pmatrix}
 $$
 
 ## Test
 ```python
-a: mat = [[1], [0]]
-result = mat_prj(a)
-np.testing.assert_allclose(result, [[1, 0], [0, 0]], atol=1e-10)
+a: vec = [1, 0]
+b: vec = [3, 4]
+result = vec_prj(a, b)
+np.testing.assert_allclose(result, [3, 0])
 ```
 
 ## Cases
 -   Test Cases: $50$
--   Dimension: $1$ to $10$ (rows and columns)
--   Tolerance: $1e-10$
+-   Dimension: $1$ to $10$
+-   Tolerance: $0$

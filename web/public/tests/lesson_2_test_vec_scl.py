@@ -6,7 +6,6 @@ from copy import copy
 
 from tests.consts import *
 from src.vec_scl import vec_scl
-from src.vec_add import vec_add
 from src.types import vec
 
 

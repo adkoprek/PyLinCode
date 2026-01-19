@@ -1,39 +1,39 @@
-def for_sub(l: mat, b: vec) -> vec:
-    rows, _ = mat_siz(l) 
-    y = []
+def lu(a: mat) -> tuple[mat, mat, mat]:
+    rows, cols = mat_siz(a)
+
+    U = copy(a)
+    L = [[0]*cols for _ in range(rows)]
+    P = mat_ide(rows)
+    
+    _, colsU = mat_siz(U)
+    _, colsP = mat_siz(P)
 
     for i in range(rows):
-        temp = b[i]
-        for col in range(0, i):
-            temp -= y[col] * l[i][col]
-        y.append(temp / l[i][i])
+        pivot = max(range(i, rows), key=lambda r: abs(U[r][i]))
 
-    return y
-        
-def bck_sub(u: mat, y: vec) -> vec:
-    rows, cols = mat_siz(u) 
-    x = []
+        if pivot != i:
+            for k in range(colsU):
+                temp = U[i][k]
+                U[i][k] = U[pivot][k]
+                U[pivot][k] = temp
 
-    for i in range(rows - 1, -1, -1):
-        if abs(u[i][i]) < ZERO:
-            raise SingularError("The matrix is singular to machine precision")
+            for k in range(colsP):
+                temp = P[i][k]
+                P[i][k] = P[pivot][k]
+                P[pivot][k] = temp
 
-        temp = y[i]
-        for col in range(rows - 1, i, -1):
-            temp -= x[cols - col - 1] * u[i][col]
+            L[i][:i], L[pivot][:i] = L[pivot][:i], L[i][:i]
 
-        x.append(temp / u[i][i])
+        for j in range(i+1, rows):
+            if U[i][i] == 0:
+                continue
 
-    x.reverse()
-    return x
+            fac = U[j][i] / U[i][i]
+            L[j][i] = fac
 
-def solve(a: mat, b: vec) -> vec:
-    rows, cols = mat_siz(a)
-    if rows != cols:
-        raise ShapeMismatchedError(f"The number of cols ({cols}) and the number of rows ({rows})")
+            for k in range(i, cols):
+                U[j][k] -= fac * U[i][k]
 
-    L, U, P = lu(a)
-    bp = mat_vec_mul(P, b)
-    y = for_sub(L, bp)
-    x = bck_sub(U, y)
-    return x
+        L[i][i] = 1.0
+
+    return L, U, P

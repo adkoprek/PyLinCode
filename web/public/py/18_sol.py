@@ -1,13 +1,3 @@
-def mat_prj(a: mat) -> mat:
-    return mat_mul(
-                mat_mul(
-                    a,
-                    inv(
-                        mat_mul(
-                            mat_tra(a),
-                            a
-                        )
-                    )
-                ),
-                mat_tra(a)
-            )
+def vec_prj(a: vec, b: vec) -> vec:
+    f = vec_dot(a, b) / vec_dot(a, a)
+    return vec_scl(a, f)

@@ -1,29 +1,12 @@
-def lu(a: mat) -> tuple[mat, mat, mat]:
+def mat_vec_mul(a: mat, b: vec) -> vec:
     rows, cols = mat_siz(a)
+    if cols != len(b):
+        raise ShapeMismatchedError(f"The number of cols ({rows}) in a does not match the length ({len(b)}) of vector b")
 
-    U = copy(a)
-    L = [[0]*cols for _ in range(rows)]
-    P = mat_ide(rows)
+    result: vec = []
 
     for i in range(rows):
-        pivot = max(range(i, rows), key=lambda r: abs(U[r][i]))
+        row = mat_row(a, i)
+        result.append(vec_dot(row, b))
 
-        if pivot != i:
-            _swap_rows(U, i, pivot)
-            _swap_rows(P, i, pivot)
-
-            L[i][:i], L[pivot][:i] = L[pivot][:i], L[i][:i]
-
-        for j in range(i+1, rows):
-            if U[i][i] == 0:
-                continue
-
-            fac = U[j][i] / U[i][i]
-            L[j][i] = fac
-
-            for k in range(i, cols):
-                U[j][k] -= fac * U[i][k]
-
-        L[i][i] = 1.0
-
-    return L, U, P
+    return result

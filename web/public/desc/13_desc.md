@@ -1,31 +1,28 @@
-# mat_vec_mul
+# mat_tra
 
 ## Task
-Create a function named `mat_vec_mul` that takes a matrix and a vector as its arguments and returns their product. If the dimensions do not match, your function must raise a `ShapeMismatchedError`.
+Create a function named `mat_tra` that takes a matrix as its argument and returns its transpose.
 
 ## Input
-- `A: mat` - Input matrix
-- `b: vec` - Input vector
+- `a: mat` - Input matrix
 
 ## Output
-- `vec` - Product of the matrix and vector
+- `mat` - Transpose of the input matrix
 
 ## Example
 $$
-\begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}
-\begin{pmatrix} 5 \\ 6 \end{pmatrix} =
-\begin{pmatrix} 17 \\ 39 \end{pmatrix}
+\begin{pmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{pmatrix}^T =
+\begin{pmatrix} 1 & 4 \\ 2 & 5 \\ 3 & 6 \end{pmatrix}
 $$
 
 ## Test
 ```python
-A: mat = [[1, 2], [3, 4]]
-b: vec = [5, 6]
-assert mat_vec_mul(A, b) == [17, 39]
+a: mat = [[1, 2, 3], [4, 5, 6]]
+result = mat_tra(a)
+np.testing.assert_allclose(result, [[1, 4], [2, 5], [3, 6]])
 ```
 
 ## Cases
 -   Test Cases: $50$
--   Error Test Cases: $5$
 -   Dimension: $1$ to $10$ (rows and columns)
 -   Tolerance: $0$

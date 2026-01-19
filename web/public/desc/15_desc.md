@@ -1,60 +1,62 @@
-# solve
+# lu
 
 ## Task
-Create a function named `solve` that takes a matrix and a vector as its arguments and solves the linear system $A\mathbf{x} = \mathbf{b}$ using LU decomposition. If $A$ is singular, your function must raise a `SingularError`. If the dimensions of $A$ and $\mathbf{b}$ are incompatible or $A$ is not square, your function must raise a `ShapeMismatchedError`.
-
-You must implement the following helper functions:
-- `for_sub(L: mat, b: vec) -> vec` - Performs forward substitution to solve $L\mathbf{y} = \mathbf{b}$
-- `bck_sub(U: mat, y: vec) -> vec` - Performs backward substitution to solve $U\mathbf{x} = \mathbf{y}$
+Create a function named `lu` that takes a matrix as its argument and returns its LU decomposition with partial pivoting as a tuple of three matrices: L (lower triangular), U (upper triangular), and P (permutation matrix), such that PA = LU.
 
 ## Input
-- `A: mat` - Coefficient matrix (must be square)
-- `b: vec` - Right-hand side vector
+- `a: mat` - Input matrix to decompose
 
 ## Output
-- `vec` - Solution vector $\mathbf{x}$
+- `tuple[mat, mat, mat]` - Tuple containing (L, U, P) matrices
 
 ## Theory
-To solve $A\mathbf{x} = \mathbf{b}$ using LU decomposition:
+LU decomposition with partial pivoting factors a matrix A into the product of three matrices: a permutation matrix P, a lower triangular matrix L with ones on the diagonal, and an upper triangular matrix U, such that PA = LU.
 
-**Step 1:** Verify that $A$ is square. If not, raise `ShapeMismatchedError`.
+Partial pivoting involves swapping rows at each step to place the largest absolute value element in the pivot position. Here's a step-by-step example:
 
-**Step 2:** Compute the LU decomposition with partial pivoting: $PA = LU$ using the `lu` function.
+Starting with:
+$$
+A = \begin{pmatrix} 2 & 1 \\ 4 & 3 \end{pmatrix}
+$$
 
-**Step 3:** Apply the permutation to the right-hand side: $\mathbf{b}' = P\mathbf{b}$ using `mat_vec_mul`.
+**Step 1:** Find the largest absolute value in column 1 (positions (1,1) and (2,1)). Since |4| > |2|, swap rows 1 and 2:
+$$
+\begin{pmatrix} 4 & 3 \\ 2 & 1 \end{pmatrix}, \quad P = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}
+$$
 
-**Step 4:** Solve $L\mathbf{y} = \mathbf{b}'$ for $\mathbf{y}$ using forward substitution (`for_sub`).
+**Step 2:** Eliminate below the pivot. The multiplier for row 2 is $\frac{2}{4} = 0.5$. Subtract 0.5 times row 1 from row 2:
+$$
+U = \begin{pmatrix} 4 & 3 \\ 0 & -0.5 \end{pmatrix}, \quad L = \begin{pmatrix} 1 & 0 \\ 0.5 & 1 \end{pmatrix}
+$$
 
-**Step 5:** Solve $U\mathbf{x} = \mathbf{y}$ for $\mathbf{x}$ using backward substitution (`bck_sub`). If a diagonal element of $U$ is zero (within machine precision), raise `SingularError`.
+The result satisfies PA = LU.
 
 ## Example
 $$
-\begin{pmatrix}
-2 & 1 \\
-1 & 3
-\end{pmatrix}
-\begin{pmatrix} x_1 \\ x_2 \end{pmatrix} =
-\begin{pmatrix} 1 \\ 2 \end{pmatrix}
-\quad \Rightarrow \quad
-\mathbf{x} =
-\begin{pmatrix} 0.2 \\ 0.6 \end{pmatrix}
+\begin{pmatrix} 2 & 1 \\ 4 & 3 \end{pmatrix} \rightarrow
+L = \begin{pmatrix} 1 & 0 \\ 0.5 & 1 \end{pmatrix}, 
+U = \begin{pmatrix} 4 & 3 \\ 0 & -0.5 \end{pmatrix}, 
+P = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}
 $$
 
 ## Test
 ```python
-A: mat = [[2, 1], [1, 3]]
-b: vec = [1, 2]
-x = solve(A, b)
+A: mat = [[2, 1], [4, 3]]
+L, U, P = lu(A)
 n = len(A)
-m = len(b)
-assert x.shape == (n,), f"x must be shape ({n},), got {x.shape}"
-assert b.shape == (m,), f"b must be shape ({m},), got {b.shape}"
-np.testing.assert_allclose(A @ x, b, atol=1e-14)
+assert L.shape == (n, n), "L must be same shape as A"
+assert U.shape == (n, n), "U must be same shape as A"
+assert P.shape == (n, n), "P must be same shape as A"
+assert np.allclose(P @ P.T, np.eye(n), atol=1e-14), "P is not orthogonal (not permutation)"
+assert np.allclose(np.sum(P, axis=0), 1), "Each column of P must have exactly one 1"
+assert np.allclose(np.sum(P, axis=1), 1), "Each row of P must have exactly one 1"
+assert np.allclose(np.tril(L), L, atol=1e-14), "L must be lower triangular"
+assert np.allclose(np.diag(L), np.ones(n), atol=1e-14), "Diagonal of L must be all ones"
+assert np.allclose(np.triu(U), U, atol=1e-14), "U must be upper triangular"
+assert np.allclose(P @ A, L @ U, atol=1e-14), "Decomposition check failed: P*A != L*U"
 ```
 
 ## Cases
--   Test Cases: $50$ (for `solve`, `for_sub`, and `bck_sub`)
--   Error Test Cases: $5$ (for `solve`)
--   Error Test Cases: $5$ (for `bck_sub` with `SingularError`)
+-   Test Cases: $50$
 -   Dimension: $1$ to $10$ (rows and columns)
--   Tolerance: $10^{-14}$
+-   Tolerance: $1e-14$

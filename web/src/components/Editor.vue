@@ -29,7 +29,6 @@ let solution = "";
 let loaded = false;
 let worker = null;
 let challanged = false;
-let oldLesson = false;
 let maxId;
 
 const props = defineProps({
@@ -83,9 +82,9 @@ async function initLocks() {
 async function lockOverlay() {
   showOverlay.value = false;
   const locks = await getLocks();
-  const minLock = locks.reduce((min, obj) => Math.min(min, obj.id), 1e10);
+  const minLock = locks.reduce((min, obj) => Math.min(min, obj.id), maxId + 1);
+
   if (minLock - 1 != props.id && !props.locked) { 
-    oldLesson = true;
     showOverlay.value = true; 
   }
 }
@@ -114,7 +113,6 @@ async function nextLesson(payload) {
 
   if (props.id == minLock - 1 && props.id != maxId) await deleteLock(minLock);
 
-  oldLesson = true;
   showOverlay.value = true;
 
   await addSubmition({

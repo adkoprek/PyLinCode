@@ -1,31 +1,30 @@
-# mat_mul
+# mat_ide
 
 ## Task
-Create a function named `mat_mul` that takes two matrices as its arguments and performs matrix multiplication. If the inner dimensions do not match, your function must raise a `ShapeMismatchedError`.
+Create a function named `mat_ide` that takes a size as its argument and returns the identity matrix of size $n \times n$.
 
 ## Input
-- `A: mat` - First input matrix
-- `B: mat` - Second input matrix
+- `n: int` - Size of the identity matrix
 
 ## Output
-- `mat` - Product of the two matrices
+- `mat` - Identity matrix of size $n \times n$
 
 ## Example
 $$
-\begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}
-\begin{pmatrix} 5 & 6 \\ 7 & 8 \end{pmatrix} =
-\begin{pmatrix} 19 & 22 \\ 43 & 50 \end{pmatrix}
+I_3 =
+\begin{pmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{pmatrix}
 $$
 
 ## Test
 ```python
-A: mat = [[1, 2], [3, 4]]
-B: mat = [[5, 6], [7, 8]]
-assert mat_mul(A, B) == [[19, 22], [43, 50]]
+assert mat_ide(3) == [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
 ```
 
 ## Cases
 -   Test Cases: $50$
--   Error Test Cases: $5$
 -   Dimension: $1$ to $10$ (rows and columns)
 -   Tolerance: $0$

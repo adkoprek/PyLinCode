@@ -1,18 +1,9 @@
 # tests/lesson_9_mat_col.py
 import numpy as np
 from dataclasses import dataclass
-from tests.consts import *
 from copy import copy
 
-# --- cumulative imports ---
-from src.vec_add import vec_add
-from src.vec_scl import vec_scl
-from src.vec_dot import vec_dot
-from src.vec_len import vec_len
-from src.vec_nor import vec_nor
-from src.mat_siz import mat_siz
-from src.mat_add import mat_add
-from src.mat_row import mat_row
+from tests.consts import *
 from src.mat_col import mat_col
 from src.types import mat, vec
 

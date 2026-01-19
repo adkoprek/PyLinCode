@@ -5,9 +5,8 @@ from dataclasses import dataclass
 from copy import copy
 
 from tests.consts import *
-from src.vec_add import vec_add
-from src.vec_dot import vec_dot
 from src.vec_scl import vec_scl
+from src.vec_dot import vec_dot
 from src.errors import ShapeMismatchedError
 from src.types import vec
 

@@ -1,27 +1,27 @@
-# mat_ide
+# mat_col
 
 ## Task
-Create a function named `mat_ide` that takes a size as its argument and returns the identity matrix of size $n \times n$.
+Create a function named `mat_col` that takes a matrix and an index as its arguments and returns the specified column of the matrix (zero-indexed).
 
 ## Input
-- `n: int` - Size of the identity matrix
+- `A: mat` - Input matrix
+- `j: int` - Column index (zero-indexed)
 
 ## Output
-- `mat` - Identity matrix of size $n \times n$
+- `vec` - The $j$-th column of the matrix
 
 ## Example
 $$
-I_3 =
-\begin{pmatrix}
-1 & 0 & 0 \\
-0 & 1 & 0 \\
-0 & 0 & 1
-\end{pmatrix}
+\begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix} 
+\rightarrow
+\begin{pmatrix} 2 \\ 4 \end{pmatrix} 
+\text{ (1st column)}
 $$
 
 ## Test
 ```python
-assert mat_ide(3) == [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+A: mat = [[1, 2, 3], [4, 5, 6]]
+assert mat_col(A, 1) == [2, 5]
 ```
 
 ## Cases

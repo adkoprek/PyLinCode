@@ -1,30 +1,41 @@
-# mat_row
+# mat_scl
 
 ## Task
-Create a function named `mat_row` that takes a matrix and an index as its arguments and returns the specified row of the matrix (zero-indexed).
+Create a function named `mat_scl` that takes a matrix and a scalar as its arguments and returns a new matrix where each element of the matrix is multiplied by the scalar.
 
 ## Input
-- `A: mat` - Input matrix
-- `i: int` - Row index (zero-indexed)
+- `A: mat` – Input matrix
+- `S: int` – Scalar multiplier
 
 ## Output
-- `vec` - The $i$-th row of the matrix
+- `mat` – Matrix resulting from multiplying every element of `A` by `S`
 
 ## Example
 $$
-\begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix} 
-\rightarrow
-\begin{pmatrix} 1 & 2 \end{pmatrix} 
-\text{ (0th row)}
+3 \cdot 
+\begin{pmatrix}
+1 & 2 \\
+3 & 4
+\end{pmatrix}=
+\begin{pmatrix}
+3 & 6 \\
+9 & 12
+\end{pmatrix}
 $$
 
 ## Test
 ```python
 A: mat = [[1, 2, 3], [4, 5, 6]]
-assert mat_row(A, 1) == [4, 5, 6]
+S: int = 2
+assert mat_scl(A, S) == [[2, 4, 6], [8, 10, 12]]
 ```
 
 ## Cases
--   Test Cases: $50$
--   Dimension: $1$ to $10$ (rows and columns)
--   Tolerance: $0$
+
+  - Test Cases: $50$
+
+  - Error Test Cases: $0$
+
+  - Dimension: $1$ to $10$ (rows and columns)
+
+  - Scalar Range: $-10$ to $10$

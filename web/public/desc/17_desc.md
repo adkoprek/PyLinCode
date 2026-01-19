@@ -1,37 +1,53 @@
-# vec_prj
+# inv
 
 ## Task
-Create a function named `vec_prj` that takes two vectors as its arguments and returns the projection of vector $\mathbf{b}$ onto vector $\mathbf{a}$.
+Create a function named `inv` that takes a matrix as its argument and returns its inverse. If $A$ is singular, your function must raise a `SingularError`. If $A$ is not square, your function must raise a `ShapeMismatchedError`.
 
 ## Input
-- `a: vec` - Vector to project onto
-- `b: vec` - Vector to be projected
+- `a: mat` - Input matrix (must be square and non-singular)
 
 ## Output
-- `vec` - Projection of $\mathbf{b}$ onto $\mathbf{a}$
+- `mat` - Inverse of the input matrix
 
 ## Theory
-The projection of vector $\mathbf{b}$ onto vector $\mathbf{a}$ is given by:
-$$
-\text{proj}_{\mathbf{a}}(\mathbf{b}) = \frac{\mathbf{a} \cdot \mathbf{b}}{\mathbf{a} \cdot \mathbf{a}} \mathbf{a}
-$$
+To compute the matrix inverse $A^{-1}$ using LU decomposition:
 
-This formula computes the scalar factor $\frac{\mathbf{a} \cdot \mathbf{b}}{\mathbf{a} \cdot \mathbf{a}}$ and multiplies it by vector $\mathbf{a}$ to obtain the projection.
+**Step 1:** Verify that $A$ is square. If not, raise `ShapeMismatchedError`.
+
+**Step 2:** Compute the LU decomposition with partial pivoting: $PA = LU$ using the `lu` function.
+
+**Step 3:** Create the identity matrix $I$ of size $n \times n$.
+
+**Step 4:** For each column $i$ of the identity matrix:
+- Extract column $\mathbf{e}_i$ from $I$
+- Apply the permutation: $\mathbf{e}_i' = P\mathbf{e}_i$
+- Solve $L\mathbf{y}_i = \mathbf{e}_i'$ using `for_sub`
+- Solve $U\mathbf{x}_i = \mathbf{y}_i$ using `bck_sub` (will raise `SingularError` if matrix is singular)
+- Column $\mathbf{x}_i$ becomes the $i$-th column of $A^{-1}$
+
+**Step 5:** Transpose the result to obtain $A^{-1}$.
 
 ## Example
 $$
-\text{proj}_{\begin{pmatrix} 1 \\ 0 \end{pmatrix}}\begin{pmatrix} 3 \\ 4 \end{pmatrix} = \frac{3}{1} \begin{pmatrix} 1 \\ 0 \end{pmatrix} = \begin{pmatrix} 3 \\ 0 \end{pmatrix}
+\begin{pmatrix}
+2 & 1 \\
+1 & 3
+\end{pmatrix}^{-1} =
+\begin{pmatrix}
+0.6 & -0.2 \\
+-0.2 & 0.4
+\end{pmatrix}
 $$
 
 ## Test
 ```python
-a: vec = [1, 0]
-b: vec = [3, 4]
-result = vec_prj(a, b)
-np.testing.assert_allclose(result, [3, 0])
+A: mat = [[2, 1], [1, 3]]
+A_inv = inv(A)
+np.testing.assert_allclose(A_inv, [[0.6, -0.2], [-0.2, 0.4]], atol=1e-14)
 ```
 
 ## Cases
 -   Test Cases: $50$
--   Dimension: $1$ to $10$
--   Tolerance: $0$
+-   Error Test Cases: $5$ (for `SingularError`)
+-   Dimension: $1$ to $10$ (rows and columns)
+-   Tolerance: $1e-14$

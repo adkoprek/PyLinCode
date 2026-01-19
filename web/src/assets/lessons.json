@@ -2,129 +2,91 @@
     "lessons": [
         {
             "id": 1,
-            "title": "vec_add",
-            "description": "",
-            "file": "vector.py"
+            "title": "vec_add"
         },
         {
             "id": 2,
-            "title": "vec_scl",
-            "description": "",
-            "file": "vector.py"
+            "title": "vec_scl"
         },
         {
             "id": 3,
-            "title": "vec_dot",
-            "description": "",
-            "file": "vector.py"
+            "title": "vec_dot"
         },
         {
             "id": 4,
-            "title": "vec_len",
-            "description": "",
-            "file": "vector.py"
+            "title": "vec_len"
         },
         {
             "id": 5,
-            "title": "vec_nor",
-            "description": "",
-            "file": "vector.py"
+            "title": "vec_nor"
         },
         {
             "id": 6,
-            "title": "mat_siz",
-            "description": "",
-            "file": "matrix.py"
+            "title": "mat_siz"
         },
         {
             "id": 7,
-            "title": "mat_add",
-            "description": "",
-            "file": "matrix.py"
+            "title": "mat_add"
         },
         {
             "id": 8,
-            "title": "mat_row",
-            "description": "",
-            "file": "matrix.py"
+            "title": "mat_scl"
         },
         {
             "id": 9,
-            "title": "mat_col",
-            "description": "",
-            "file": "matrix.py"
+            "title": "mat_row"
         },
         {
             "id": 10,
-            "title": "mat_ide",
-            "description": "",
-            "file": "matrix.py"
+            "title": "mat_col"
         },
         {
             "id": 11,
-            "title": "mat_mul",
-            "description": "",
-            "file": "matrix.py"
+            "title": "mat_ide"
         },
         {
             "id": 12,
-            "title": "mat_tra",
-            "description": "",
-            "file": "matrix.py"
+            "title": "mat_mul"
         },
         {
             "id": 13,
-            "title": "mat_vec_mul",
-            "description": "",
-            "file": "mat_vec.py"
+            "title": "mat_tra"
         },
         {
             "id": 14,
-            "title": "lu",
-            "description": "",
-            "file": "lu.py"
+            "title": "mat_vec_mul"
         },
         {
             "id": 15,
-            "title": "solve",
-            "description": "",
-            "file": "lu.py"
+            "title": "lu"
         },
         {
             "id": 16,
-            "title": "inv",
-            "description": "",
-            "file": "inverse.py"
+            "title": "solve"
         },
         {
             "id": 17,
-            "title": "vec_prj",
-            "description": "",
-            "file": "qr.py"
+            "title": "inv"
         },
         {
             "id": 18,
-            "title": "mat_prj",
-            "description": "",
-            "file": "qr.py"
+            "title": "vec_prj"
         },
         {
             "id": 19,
-            "title": "ortho",
-            "description": "",
-            "file": "qr.py"
+            "title": "mat_prj"
         },
         {
             "id": 20,
-            "title": "qr",
-            "description": "",
-            "file": "qr.py"
+            "title": "ortho"
         },
         {
             "id": 21,
-            "title": "det",
-            "description": "",
-            "file": "determinant.py"
+            "title": "qr"
+        },
+        {
+            "id": 22,
+            "title": "det"
         }
     ]
 }
