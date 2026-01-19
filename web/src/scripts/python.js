@@ -53,6 +53,9 @@ async function loadHelpers() {
 
   const runTestCode = await (await fetch("/helpers/run_lesson.py")).text();
   pyodide.FS.writeFile("/run_lesson.py", runTestCode, { encoding: "utf8" });
+
+  const hotReloadCode = await (await fetch("/helpers/hot_reload.py")).text();
+  pyodide.FS.writeFile("/hot_reload.py", hotReloadCode, { encoding: "utf8" });
 }
 
 async function loadTest(lesson) {
@@ -78,7 +81,9 @@ async function runCode(code, lesson) {
     await pyodide.runPythonAsync(`
       import sys
       sys.path.append("/")
+      import hot_reload
       import run_lesson
+      hot_reload.hot_reload()
       run_lesson.run_lesson(${lesson})
     `);
     self.postMessage({ type: "out", payload: `Lesson ${lesson} tests passed!` });
