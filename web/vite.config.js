@@ -25,4 +25,7 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  worker: {
+    format: 'es' // <-- important! use 'es', not 'iife' or 'umd'
+  }
 })
