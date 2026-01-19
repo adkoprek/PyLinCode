@@ -26,7 +26,7 @@ def run():
         ca_copy = copy(c.a)
         cb_copy = copy(c.b)
 
-        result = vec_prj(c.a, c.b)
+        result = vec_prj(c.a.tolist(), c.b.tolist())
         np.testing.assert_allclose(result, c.result, atol=0)
 
         np.testing.assert_equal(ca_copy, c.a, "You changed the input a")

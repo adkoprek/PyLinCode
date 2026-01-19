@@ -39,7 +39,7 @@ def run():
         else:
             ca_copy = copy(c.a)
 
-            result = det(c.a)
+            result = det(c.a.tolist())
             assert abs(result - c.result) < ZERO
 
             np.testing.assert_equal(ca_copy, c.a, "Vou changed the input a")

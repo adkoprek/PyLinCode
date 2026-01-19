@@ -26,7 +26,7 @@ def run():
     for c in load_cases():
         ca_copy = copy(c.a)
 
-        r = vec_nor(c.a)
+        r = vec_nor(c.a.tolist())
         np.testing.assert_allclose(r, c.result, atol=1e-10)
         np.testing.assert_allclose(vec_len(r), 1.0, atol=1e-10)
 

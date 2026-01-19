@@ -26,7 +26,7 @@ def run():
     for c in load_cases():
         ca_copy = copy(c.a)
 
-        r = vec_len(c.a)
+        r = vec_len(c.a.tolist())
         np.testing.assert_allclose(r, c.result, atol=0)
         np.testing.assert_allclose(r * r, vec_dot(c.a, c.a), atol=1e-10)
 

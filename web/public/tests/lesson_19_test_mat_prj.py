@@ -27,7 +27,7 @@ def run():
     for c in load_cases():
         ca_copy = copy(c.a)
 
-        result = mat_prj(c.a)
+        result = mat_prj(c.a.tolist())
         np.testing.assert_allclose(result, c.result, atol=UNSTABLE_ZERO)
 
         np.testing.assert_equal(ca_copy, c.a, "You changed the input a")

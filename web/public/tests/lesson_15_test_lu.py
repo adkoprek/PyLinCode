@@ -33,7 +33,7 @@ def run():
         cA_copy = copy(c.A)
 
         A = c.A
-        L, U, P = lu(A)
+        L, U, P = lu(A.tolist())
         Lm = np.array(L)
         Um = np.array(U)
         Pm = np.array(P)

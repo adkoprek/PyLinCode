@@ -28,6 +28,6 @@ def run():
     for c in load_cases():
         cA_copy = copy(c.A)
 
-        np.testing.assert_allclose(mat_row(c.A, c.row_index), c.result, atol=0)
+        np.testing.assert_allclose(mat_row(c.A.tolist(), c.row_index), c.result, atol=0)
 
         np.testing.assert_equal(cA_copy, c.A, "You changed the input A")

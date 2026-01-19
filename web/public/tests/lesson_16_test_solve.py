@@ -67,7 +67,7 @@ def run():
             cA_copy = copy(c.A)
             cb_copy = copy(c.b)
 
-            x = solve(c.A, c.b)
+            x = solve(c.A.tolist(), c.b.tolist())
             A = np.asarray(c.A, dtype=float)
             x = np.asarray(x, dtype=float)
             b = np.asarray(c.b, dtype=float)

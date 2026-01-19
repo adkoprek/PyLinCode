@@ -48,7 +48,7 @@ def run():
         else:
             ca_copy = copy(c.a)
 
-            result = inv(c.a)
+            result = inv(c.a.tolist())
             np.testing.assert_allclose(result, c.result, atol=ZERO)
 
             np.testing.assert_equal(ca_copy, c.a, "You changed the input a")

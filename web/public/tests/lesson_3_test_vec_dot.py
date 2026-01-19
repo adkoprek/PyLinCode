@@ -47,7 +47,7 @@ def run():
             ca_copy = copy(c.a)
             cb_copy = copy(c.b)
 
-            r = vec_dot(c.a, c.b)
+            r = vec_dot(c.a.tolist(), c.b.tolist())
             np.testing.assert_allclose(r, c.result, atol=0)
             np.testing.assert_allclose(vec_dot(vec_scl(c.a, 2), c.b), 2 * r)
 

@@ -28,7 +28,7 @@ def run():
     for c in load_cases():
         cA_copy = copy(c.A)
 
-        result = mat_siz(c.A)
+        result = mat_siz(c.A.tolist())
         assert result == c.result
 
         np.testing.assert_equal(cA_copy, c.A, "You changed the input A")

@@ -44,7 +44,7 @@ def run():
             cA_copy = copy(c.A)
             cB_copy = copy(c.B)
 
-            np.testing.assert_allclose(mat_mul(c.A, c.B), c.result, atol=0)
+            np.testing.assert_allclose(mat_mul(c.A.tolist(), c.B.tolist()), c.result, atol=0)
 
             np.testing.assert_equal(cA_copy, c.A, "You changed the input A")
             np.testing.assert_equal(cB_copy, c.B, "You changed the input B")

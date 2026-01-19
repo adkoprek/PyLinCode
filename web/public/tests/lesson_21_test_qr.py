@@ -22,7 +22,7 @@ def run():
     for c in load_cases():
         ca_copy = copy(c.a)
 
-        Q, R = qr(c.a)
+        Q, R = qr(c.a.tolist())
         QM = np.array(Q)
         RM = np.array(R)
         np.testing.assert_allclose(QM @ QM.T, np.eye(len(Q)), atol=UNSTABLE_ZERO)
