@@ -2,6 +2,7 @@
 import random
 import numpy as np
 from dataclasses import dataclass
+from copy import copy
 
 from tests.consts import *
 from src.vec_add import vec_add
@@ -42,4 +43,10 @@ def run():
                 continue
             raise AssertionError("vec_add: expected ShapeMismatchedError")
         else:
+            ca_copy = copy(c.a)
+            cb_copy = copy(c.b)
+
             np.testing.assert_allclose(vec_add(c.a, c.b), c.result, atol=0)
+
+            np.testing.assert_equal(ca_copy, c.a, "You changed the input a")
+            np.testing.assert_equal(cb_copy, c.b, "You changed the input b")

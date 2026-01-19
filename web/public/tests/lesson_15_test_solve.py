@@ -3,6 +3,7 @@ import numpy as np
 from dataclasses import dataclass
 from tests.consts import *
 from src.errors import SingularError, ShapeMismatchedError
+from copy import copy
 
 # --- cumulative imports ---
 from src.vec_add import vec_add
@@ -75,6 +76,9 @@ def run():
                 continue
             raise AssertionError("solve: expected ShapeMismatchedError")
         else:
+            cA_copy = copy(c.A)
+            cb_copy = copy(c.b)
+
             x = solve(c.A, c.b)
             A = np.asarray(c.A, dtype=float)
             x = np.asarray(x, dtype=float)
@@ -83,3 +87,6 @@ def run():
             assert x.shape == (n,)
             assert b.shape == (m,)
             np.testing.assert_allclose(A @ x, b, atol=ZERO)
+
+            np.testing.assert_equal(cA_copy, c.A, "You changed the input A")
+            np.testing.assert_equal(cb_copy, c.b, "You changed the input b")

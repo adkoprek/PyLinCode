@@ -2,6 +2,7 @@
 import numpy as np
 from dataclasses import dataclass
 from tests.consts import *
+from copy import copy
 
 # --- cumulative imports ---
 from src.vec_add import vec_add

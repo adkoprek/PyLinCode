@@ -1,6 +1,7 @@
 # tests/lesson_5_vec_nor.py
 import numpy as np
 from dataclasses import dataclass
+from copy import copy
 
 from tests.consts import *
 from src.vec_add import vec_add
@@ -26,6 +27,10 @@ def load_cases():
 
 def run():
     for c in load_cases():
+        ca_copy = copy(c.a)
+
         r = vec_nor(c.a)
         np.testing.assert_allclose(r, c.result, atol=1e-10)
         np.testing.assert_allclose(vec_len(r), 1.0, atol=1e-10)
+
+        np.testing.assert_equal(ca_copy, c.a, "You changed the input a")

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from tests.consts import *
 from src.types import mat
 from src.errors import ShapeMismatchedError
+from copy import copy
 
 # --- cumulative imports ---
 from src.vec_add import vec_add
@@ -53,5 +54,9 @@ def run():
                 continue
             raise AssertionError("det: expected ShapeMismatchedError")
         else:
+            ca_copy = copy(c.a)
+
             result = det(c.a)
             assert abs(result - c.result) < ZERO
+
+            np.testing.assert_equal(ca_copy, c.a, "Vou changed the input a")

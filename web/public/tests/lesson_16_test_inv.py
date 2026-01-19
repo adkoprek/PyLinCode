@@ -3,6 +3,7 @@ import numpy as np
 from dataclasses import dataclass
 from tests.consts import *
 from src.errors import SingularError
+from copy import copy
 
 # --- cumulative imports ---
 from src.vec_add import vec_add
@@ -61,5 +62,9 @@ def run():
                 continue
             raise AssertionError("inv: expected SingularError")
         else:
+            cA_copy = copy(c.A)
+
             result = inv(c.a)
             np.testing.assert_allclose(result, c.result, atol=ZERO)
+
+            np.testing.assert_equal(cA_copy, c.A, "You changed the input A")

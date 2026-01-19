@@ -2,6 +2,7 @@
 import numpy as np
 from dataclasses import dataclass
 from tests.consts import *
+from copy import copy
 
 # --- cumulative imports ---
 from src.vec_add import vec_add
@@ -35,4 +36,8 @@ def load_cases():
 
 def run():
     for c in load_cases():
+        cA_copy = copy(c.A)
+
         np.testing.assert_allclose(mat_tra(c.A), c.result, atol=0)
+
+        np.testing.assert_equal(cA_copy, c.A, "You changed the input A")

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from tests.consts import *
 from src.types import mat
 from src.errors import SingularError
+from copy import copy
 
 # --- cumulative imports ---
 from src.vec_add import vec_add
@@ -42,5 +43,9 @@ def load_cases():
 
 def run():
     for c in load_cases():
+        ca_copy = copy(c.a)
+
         result = mat_prj(c.a)
         np.testing.assert_allclose(result, c.result, atol=UNSTABLE_ZERO)
+
+        np.testing.assert_equal(ca_copy, c.a, "You changed the input a")

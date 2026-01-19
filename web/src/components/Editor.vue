@@ -37,6 +37,10 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  locked: {
+    type: Boolean,
+    required: true
+  }
 });
 
 onMounted(async () => {
@@ -80,7 +84,7 @@ async function lockOverlay() {
   showOverlay.value = false;
   const locks = await getLocks();
   const minLock = locks.reduce((min, obj) => Math.min(min, obj.id), 1e10);
-  if (minLock - 1 != props.id) { 
+  if (minLock - 1 != props.id && !props.locked) { 
     oldLesson = true;
     showOverlay.value = true; 
   }

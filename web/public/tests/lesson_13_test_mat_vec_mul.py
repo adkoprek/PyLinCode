@@ -3,6 +3,7 @@ import numpy as np
 from dataclasses import dataclass
 from tests.consts import *
 from src.errors import ShapeMismatchedError
+from copy import copy
 
 # --- cumulative imports ---
 from src.vec_add import vec_add
@@ -54,4 +55,10 @@ def run():
                 continue
             raise AssertionError("mat_vec_mul: expected ShapeMismatchedError")
         else:
+            cA_copy = copy(c.A)
+            cv_copy = copy(c.v)
+
             np.testing.assert_allclose(mat_vec_mul(c.a, c.v), c.result, atol=0)
+
+            np.testing.assert_equal(cA_copy, c.A, "You changed the input A")
+            np.testing.assert_equal(cv_copy, c.v, "You changed the input v")

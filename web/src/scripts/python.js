@@ -68,6 +68,7 @@ async function loadTest(lesson) {
 function addImports(code) {
   return `from src.errors import ShapeMismatchedError
 from src.types import vec
+from copy import copy
 ${code}`;
 }
 

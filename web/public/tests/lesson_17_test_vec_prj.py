@@ -3,6 +3,7 @@ import numpy as np
 from dataclasses import dataclass
 from tests.consts import *
 from src.types import vec
+from copy import copy
 
 # --- cumulative imports ---
 from src.vec_add import vec_add
@@ -39,5 +40,11 @@ def load_cases():
 
 def run():
     for c in load_cases():
+        ca_copy = copy(c.a)
+        cb_copy = copy(c.b)
+
         result = vec_prj(c.a, c.b)
         np.testing.assert_allclose(result, c.result, atol=0)
+
+        np.testing.assert_equal(ca_copy, c.a, "You changed the input a")
+        np.testing.assert_equal(cb_copy, c.b, "You changed the input b")

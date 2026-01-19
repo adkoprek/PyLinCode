@@ -3,6 +3,7 @@ import numpy as np
 from dataclasses import dataclass
 from tests.consts import *
 from src.types import mat
+from copy import copy
 
 # --- cumulative imports ---
 from src.vec_add import vec_add
@@ -39,6 +40,8 @@ def load_cases():
 
 def run():
     for c in load_cases():
+        ca_copy = copy(c.a)
+
         Q, R = qr(c.a)
         QM = np.array(Q)
         RM = np.array(R)
@@ -48,3 +51,5 @@ def run():
         assert QM.shape == (m, m)
         assert RM.shape == (m, n)
         assert np.allclose(RM, np.triu(RM), atol=UNSTABLE_ZERO)
+
+        np.testing.assert_equal(ca_copy, c.a, "Vou changed the input a")

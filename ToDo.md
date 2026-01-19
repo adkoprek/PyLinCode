@@ -2,8 +2,7 @@
 
 ## UI
 
-### Release locks on update
+  1. Fix backward import of lessons
 
-### Error Handling
+  2. Error Handling
 
-### Check if input was altered and allow to use copy

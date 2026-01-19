@@ -3,6 +3,7 @@ import numpy as np
 from dataclasses import dataclass
 from tests.consts import *
 from src.errors import SingularError, ShapeMismatchedError
+from copy import copy
 
 # --- cumulative imports ---
 from src.vec_add import vec_add
@@ -43,6 +44,8 @@ def load_cases():
 
 def run():
     for c in load_cases():
+        cA_copy = copy(c.A)
+
         A = c.A
         L, U, P = lu(A)
         Lm = np.array(L)
@@ -68,3 +71,5 @@ def run():
 
         # Decomposition
         assert np.allclose(Pm @ A, Lm @ Um, atol=ZERO)
+
+        np.testing.assert_equal(cA_copy, c.A, "You changed the input A")

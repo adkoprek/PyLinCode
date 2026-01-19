@@ -76,7 +76,7 @@ watchEffect(() => {
                     <Task :id="lesson.id" :title="lesson.title" />
                 </template>
                 <template #right>
-                    <Editor :id="lesson.id" />
+                    <Editor :id="lesson.id" :locked="locked" />
                 </template>
             </DragCol>
         </div>
