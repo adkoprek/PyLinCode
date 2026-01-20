@@ -1,2 +1,4 @@
 .pytest_cache/
+web/dist/
+node_modules/
 __pycache__/
