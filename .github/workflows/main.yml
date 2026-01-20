@@ -10,18 +10,10 @@ jobs:
     steps:
       - name: Repository Checkout
         uses: actions/checkout@v4
-
-      - name: Debug folders
-        run: |
-          pwd
-          ls
-          ls web
       
       - name: Build app
         run: |
           cd web
-          pwd
-          ls
           npm install
           npm run build
 
