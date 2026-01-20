@@ -15,10 +15,6 @@ export default defineConfig({
   ],
   optimizeDeps: {
     exclude: ['pyodide'], // prevent Vite from trying to pre-bundle pyodide
-    include: ["@latex2js/vue"],
-  },
-  ssr: {
-    noExternal: ['@latex2js/vue'],
   },
   resolve: {
     alias: {

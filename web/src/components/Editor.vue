@@ -3,7 +3,7 @@ import { CodeEditor } from "monaco-editor-vue3";
 import { VueSpinnerIos } from "vue3-spinners";
 import DragRow from "vue-resizer/DragRow.vue";
 import * as monaco from "monaco-editor";
-import { ref, onMounted, watch, Ref } from "vue";
+import { ref, onMounted, watch, Ref, onUnmounted } from "vue";
 import lessons_data from "@/assets/lessons.json"
 import SolutionChallange from "./SolutionChallange.vue";
 import Solution from "./Solution.vue";
@@ -56,6 +56,7 @@ onMounted(async () => {
   initPyodite();
 });
 
+
 watch(props, async () => {
   await loadCode(props.id);
   await handleEditOverlay();
@@ -63,16 +64,21 @@ watch(props, async () => {
   loaded = false;
 })
 
+const debounceFunc = debounce(async function () {
+  await changeCurrent({ id: props.id.toString(), code: code.value });
+}, 500);
+
 watch(code, () => {
-  const debounceFunc = debounce(async function () {
-    await changeCurrent({ id: props.id.toString(), code: code.value });
-  }, 500);
   debounceFunc();
 });
 
-setInterval(async () => {
+const interval = setInterval(async () => {
   await changeCurrent({ id: props.id.toString(), code: code.value });
 }, 10000);
+
+onUnmounted(() => {
+  clearInterval(interval);
+});
 
 /****************************** LOCKS ********************************/
 
@@ -135,7 +141,7 @@ function scrollToBottom() {
 /****************************** EXEC ********************************/
 
 function initPyodite() {
-  worker = new Worker(new URL('@/scripts/python.js', import.meta.url), { type: 'module' });
+  worker = new Worker(new URL('@/scripts/python.ts', import.meta.url), { type: 'module' });
 
   worker.onmessage = async (e) => {
     const { type, payload } = e.data;
