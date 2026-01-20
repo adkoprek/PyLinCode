@@ -169,8 +169,6 @@ function runCode() {
 async function nextLesson(payload: string) {
   showEditOverlay.value = true;
 
-  const locks = await getLocks();
-  const minLock = locks.reduce((min, obj) => Math.min(min, parseInt(obj.id)), maxId + 1);
   if (props.id + 1 < maxId) await deleteLock(props.id + 1);
 
   await addSubmition({
