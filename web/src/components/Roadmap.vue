@@ -1,5 +1,5 @@
-<script>
-import katexDirective from "@/katex-directive.js";
+<script lang="ts">
+import katexDirective from "@/katex-directive.ts";
 
 export default {
   name: "Roadmap",

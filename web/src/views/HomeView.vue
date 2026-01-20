@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Hero from '@/components/Hero.vue';
 import Roadmap from '@/components/Roadmap.vue';
 import Footer from '@/components/Footer.vue';

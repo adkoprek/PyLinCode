@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import not_found from '@/assets/not_found.svg';
 </script>
 

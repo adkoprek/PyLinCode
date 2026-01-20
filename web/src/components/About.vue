@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import profile from '@/assets/profile.png';
 </script>
 

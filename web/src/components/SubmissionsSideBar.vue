@@ -1,12 +1,13 @@
-<script setup>
+<script setup lang="ts">
+import { SubmissionsDocument } from '@/scripts/schemas';
 import { initDatabase, getSubmissions, subscribeToSubmissionInsert } from '@/scripts/db';
 import { onMounted, ref, watch } from 'vue';
 import Solution from './Solution.vue';
 
 
 const isOpen = ref(false);
-const submissions = ref([]);
-const overlay = ref(null);
+const submissions = ref<SubmissionsDocument[]>([]);
+const overlay = ref(false);
 const code = ref('');
 
 const props = defineProps({
@@ -26,14 +27,14 @@ watch(() => props.id, async (newId) => {
     submissions.value = await getSubmissions(newId);
 });
 
-async function submissionInsert(id) {
+async function submissionInsert(id: number) {
     if (props.id == id) {
         submissions.value = await getSubmissions(props.id);
     }
 }
 
-function openSubmission(submissionId) {
-    const result = submissions.value.find((submission) => submission.id === submissionId);
+function openSubmission(submissionId: string) {
+    const result = submissions.value.find((submission) => submission.id === submissionId) ?? { code: '' };
     code.value = result.code;
     overlay.value = true;
 }

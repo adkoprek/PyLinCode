@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import Prism from "prismjs"
 import "prismjs/components/prism-python"
 import "prismjs/themes/prism.css"
-import { defineEmits, onMounted } from "vue"
+import { onMounted } from "vue"
 
 onMounted(() => {
   Prism.highlightAll()

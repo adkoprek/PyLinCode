@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, watchEffect } from 'vue';
 import not_found from '@/assets/not_found.svg';
 import Task from '@/components/Task.vue';
@@ -16,23 +16,25 @@ const props = defineProps({
     }
 });
 
-const lesson = ref({})
+const lesson = ref({ id: -1, title: "" })
 const locked = ref(false);
 
 onMounted(async () => {
     await initDatabase();
-    const locks = await getLocks();
-    locks.forEach((e) => {
-        if (props.id == e.id) locked.value = true;
-    });
+    await checkLock();
 });
 
 watchEffect(() => {
     locked.value = false;
-    lesson.value = lessons_data.lessons.find(
-        lesson => parseInt(lesson.id) === props.id
-    ) || { id: -1 };
+    lesson.value = lessons_data.lessons.find(lesson => lesson.id === props.id) || { id: -1, title: "" };
 });
+
+async function checkLock() {
+    const locks = await getLocks();
+    locks.forEach((e) => {
+        if (props.id.toString() == e.id) locked.value = true;
+    });
+}
 </script>
 
 

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import CodeInfoBlock from '@/components/CodeInfoBlock.vue';
 import Footer from '@/components/Footer.vue';
 import { RouterLink } from 'vue-router';

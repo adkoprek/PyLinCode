@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { onBeforeMount, ref } from "vue";
 import { RouterLink } from "vue-router";
 import lessons_data from "../assets/lessons.json";
@@ -15,8 +15,8 @@ onBeforeMount(async () => {
     locks.value.add(parseInt(lock.id));
   }
 
-  subscrbeToInsert((id) => locks.value.add(parseInt(id)));
-  subscrbeToRemove((id) => locks.value.delete(parseInt(id)))
+  subscrbeToInsert((id: string) => locks.value.add(parseInt(id)));
+  subscrbeToRemove((id: string) => locks.value.delete(parseInt(id)));
 });
 
 defineProps({
@@ -44,7 +44,7 @@ defineProps({
       </button>
       <ul class="space-y-2">
         <div v-for="lesson in lessons" :key="lesson.id">
-          <span v-if="locks.has(parseInt(lesson.id))" class="group relative">
+          <span v-if="locks.has(lesson.id)" class="group relative">
             <li
               :class="[
                 'flex items-center justify-center space-x-3 p-3 group opacity-50',
@@ -58,7 +58,7 @@ defineProps({
               </span>
             </li>
           </span>
-          <RouterLink v-else :to="`/coding/${parseInt(lesson.id)}`">
+          <RouterLink v-else :to="`/coding/${lesson.id}`">
             <li
               :class="[
                 'flex items-center justify-center space-x-3 cursor-pointer p-3 group',

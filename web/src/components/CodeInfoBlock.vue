@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted } from "vue"
 import Prism from "prismjs"
 import "prismjs/components/prism-python"

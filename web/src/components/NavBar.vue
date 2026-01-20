@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import logo from '@/assets/logo.png'
 import { RouterLink, useRoute } from 'vue-router';
 
-const isActiveLink = (routePath) => {
+const isActiveLink = (routePath: any) => {
   const route = useRoute();
   return route.path == routePath;
 }
