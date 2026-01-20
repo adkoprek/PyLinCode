@@ -11,23 +11,20 @@ jobs:
       - name: Repository Checkout
         uses: actions/checkout@v4
 
-      - name: Move into working-directory
-        run: cd web
-
-      - name: Install environmnet
-        run: npm i
+      - name: Build app
+        run: |
+          cd web \
+          npm i \
+          npm run build
 
       - name: Install Netlify
         run: npm install netlify-cli@17.10.1 -g
-
-      - name: Build
-        run: npm run build
 
       - name: Deploy to Netlify
         id: netlify_deploy
         run: |
           netlify deploy \
-            --dir dist \
+            --dir web/dist \
             --site ${{ secrets.NETLIFY_SITE_ID }} \
             --auth ${{ secrets.NETLIFY_API_TOKEN }} \
             --prod
