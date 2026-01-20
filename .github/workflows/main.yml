@@ -11,10 +11,18 @@ jobs:
       - name: Repository Checkout
         uses: actions/checkout@v4
 
+      - name: Debug folders
+        run: |
+          pwd
+          ls
+          ls web
+      
       - name: Build app
         run: |
           cd web
-          npm i
+          pwd
+          ls
+          npm install
           npm run build
 
       - name: Install Netlify
