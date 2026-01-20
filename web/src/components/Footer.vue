@@ -16,8 +16,8 @@
       <div>
         <h3 class="text-lg font-semibold mb-3 text-white">Contact</h3>
         <ul class="space-y-2">
-          <li>Email: <a href="mailto:adam.koprek@stud.kswe.ch" class="hover:text-white">youremail@example.com</a></li>
-          <li>GitHub: <a href="https://github.com/adkoprek" target="_blank" class="hover:text-white">github.com/yourgithub</a></li>
+          <li>Email: <a href="mailto:adam.koprek@stud.kswe.ch" class="hover:text-white">adam.koprek@stud.kswe.ch</a></li>
+          <li>GitHub: <a href="https://github.com/adkoprek" target="_blank" class="hover:text-white">github.com/adkoprek</a></li>
         </ul>
       </div>
     </div>
