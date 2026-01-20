@@ -13,8 +13,8 @@ jobs:
 
       - name: Build app
         run: |
-          cd web \
-          npm i \
+          cd web
+          npm i
           npm run build
 
       - name: Install Netlify
