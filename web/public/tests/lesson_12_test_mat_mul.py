@@ -5,7 +5,7 @@ from copy import copy
 
 from tests.consts import *
 from src.errors import ShapeMismatchedError
-from src.mat_mul import mat_mul
+import src.mat_mul as mat_mul
 from src.types import mat
 
 
@@ -33,10 +33,12 @@ def load_cases():
 
 
 def run():
+    globals_before = set(mat_mul.__dict__.keys())
+
     for c in load_cases():
         if c.error:
             try:
-                mat_mul(c.A, c.B)
+                mat_mul.mat_mul(c.A, c.B)
             except c.result:
                 continue
             raise AssertionError("mat_mul: expected ShapeMismatchedError")
@@ -44,7 +46,11 @@ def run():
             cA_copy = copy(c.A)
             cB_copy = copy(c.B)
 
-            np.testing.assert_allclose(mat_mul(c.A.tolist(), c.B.tolist()), c.result, atol=0)
+            np.testing.assert_allclose(mat_mul.mat_mul(c.A.tolist(), c.B.tolist()), c.result, atol=0)
 
             np.testing.assert_equal(cA_copy, c.A, "You changed the input A")
             np.testing.assert_equal(cB_copy, c.B, "You changed the input B")
+
+    globals_after = set(mat_mul.__dict__.keys())
+    new_globals = globals_after - globals_before
+    assert not new_globals, f"You created a global variable {new_globals} which is forbidden"

@@ -1,6 +1,6 @@
-import { CurrentDocType, CurrentDocument, currentSchema, Database, DatabaseCollections, lockedSchema, SubmissionsDocType, SubmissionsDocument, submissionsSchema } from "./schemas";
+import { CurrentDocType, currentSchema, Database, DatabaseCollections, SubmissionsDocType, submissionsSchema } from "./schemas";
 import { addRxPlugin, createRxDatabase } from "rxdb";
-import { getRxStorageDexie, RxStorageDexie } from "rxdb/plugins/storage-dexie";
+import { getRxStorageDexie } from "rxdb/plugins/storage-dexie";
 import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
 import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'; 
@@ -34,7 +34,6 @@ async function init() {
     });
 
     await database.addCollections({
-        locked: { schema: lockedSchema },
         current: { schema: currentSchema },
         submissions: { schema: submissionsSchema }
     })
@@ -49,44 +48,6 @@ export function dbExists() {
     return !!database;
 }
 
-
-/******************************* Locks *******************************************/
-export async function getLocks() {
-    return await db().locked.find().exec()
-}
-
-export async function clearLocks() {
-    let locks = await getLocks();
-    for (const lock of locks) {
-        await lock.remove();
-    }
-}
-
-export async function lockRange(from: number, to: number) {
-    for (let i = from; i < (to + 1); i++) {
-        await db().locked.insertIfNotExists({
-            id: i.toString()
-        })
-    }
-}
-
-
-export async function deleteLock(id: number) {
-    const lock = await db().locked.findOne({
-        selector: {
-            id: id.toString()
-        }
-    }).exec();
-    await lock?.remove();
-}
-
-export function subscrbeToInsert(callback: (id: string) => void) {
-    db().locked.insert$.subscribe(change => callback(change.documentId));
-}
-
-export function subscrbeToRemove(callback: (id: string) => void) {
-    db().locked.remove$.subscribe(change => callback(change.documentId));
-}
 
 /******************************* Submission *******************************************/
 export async function addSubmition(submission: SubmissionsDocType) {

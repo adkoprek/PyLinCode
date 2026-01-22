@@ -6,7 +6,7 @@ from copy import copy
 
 from tests.consts import *
 from src.types import vec
-from src.ortho import ortho
+import src.ortho as ortho
 
 @dataclass
 class Case:
@@ -27,11 +27,13 @@ def load_cases():
     return cases
 
 def run():
+    globals_before = set(ortho.__dict__.keys())
+
     for c in load_cases():
         cexisting_copy = copy(c.existing)
         cnew_copy = copy(c.new)
 
-        orthogonalized = ortho(c.existing, c.new)
+        orthogonalized = ortho.ortho(c.existing, c.new)
         bv = np.array(orthogonalized)
         assert abs(np.linalg.norm(bv) - 1) < UNSTABLE_ZERO
         for a in c.existing:
@@ -40,3 +42,7 @@ def run():
 
         np.testing.assert_equal(cexisting_copy, c.existing, "You changed the input exisiting")
         np.testing.assert_equal(cnew_copy, c.new, "You changed the input new")
+
+    globals_after = set(ortho.__dict__.keys())
+    new_globals = globals_after - globals_before
+    assert not new_globals, f"You created a global variable {new_globals} which is forbidden"

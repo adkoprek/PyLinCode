@@ -5,7 +5,7 @@ from copy import copy
 
 from tests.consts import *
 from src.errors import SingularError, ShapeMismatchedError
-from src.lu import lu
+import src.lu as lu
 from src.types import mat, vec
 
 
@@ -29,11 +29,13 @@ def load_cases():
 
 
 def run():
+    globals_before = set(lu.__dict__.keys())
+
     for c in load_cases():
         cA_copy = copy(c.A)
 
         A = c.A
-        L, U, P = lu(A.tolist())
+        L, U, P = lu.lu(A.tolist())
         Lm = np.array(L)
         Um = np.array(U)
         Pm = np.array(P)
@@ -59,3 +61,7 @@ def run():
         assert np.allclose(Pm @ A, Lm @ Um, atol=ZERO)
 
         np.testing.assert_equal(cA_copy, c.A, "You changed the input A")
+
+    globals_after = set(lu.__dict__.keys())
+    new_globals = globals_after - globals_before
+    assert not new_globals, f"You created a global variable {new_globals} which is forbidden"

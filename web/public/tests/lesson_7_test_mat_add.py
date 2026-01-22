@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from copy import copy
 
 from tests.consts import *
-from src.mat_add import mat_add
+import src.mat_add as mat_add
 from src.types import mat
 from src.errors import ShapeMismatchedError
 
@@ -33,10 +33,12 @@ def load_cases():
 
 
 def run():
+    globals_before = set(mat_add.__dict__.keys())
+
     for c in load_cases():
         if c.error:
             try:
-                mat_add(c.A, c.B)
+                mat_add.mat_add(c.A, c.B)
             except c.result:
                 continue
             raise AssertionError("mat_add: expected ShapeMismatchedError")
@@ -44,7 +46,11 @@ def run():
             cA_copy = copy(c.A)
             cB_copy = copy(c.B)
 
-            np.testing.assert_allclose(mat_add(c.A.tolist(), c.B.tolist()), c.result, atol=0)
+            np.testing.assert_allclose(mat_add.mat_add(c.A.tolist(), c.B.tolist()), c.result, atol=0)
 
             np.testing.assert_equal(cA_copy, c.A, "You changed the input A")
             np.testing.assert_equal(cB_copy, c.B, "You changed the input B")
+
+    globals_after = set(mat_add.__dict__.keys())
+    new_globals = globals_after - globals_before
+    assert not new_globals, f"You created a global variable {new_globals} which is forbidden"

@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from copy import copy
 
 from tests.consts import *
-from src.vec_add import vec_add
+import src.vec_add as vec_add
 from src.errors import ShapeMismatchedError
 from src.types import vec
 
@@ -35,10 +35,12 @@ def load_cases():
 
 
 def run():
+    globals_before = set(vec_add.__dict__.keys())
+
     for c in load_cases():
         if c.error:
             try:
-                vec_add(c.a, c.b)
+                vec_add.vec_add(c.a, c.b)
             except c.result:
                 continue
             raise AssertionError("vec_add: expected ShapeMismatchedError")
@@ -46,7 +48,11 @@ def run():
             ca_copy = copy(c.a)
             cb_copy = copy(c.b)
 
-            np.testing.assert_allclose(vec_add(c.a.tolist(), c.b.tolist()), c.result, atol=0)
+            np.testing.assert_allclose(vec_add.vec_add(c.a.tolist(), c.b.tolist()), c.result, atol=0)
 
             np.testing.assert_equal(ca_copy, c.a, "You changed the input a")
             np.testing.assert_equal(cb_copy, c.b, "You changed the input b")
+
+    globals_after = set(vec_add.__dict__.keys())
+    new_globals = globals_after - globals_before
+    assert not new_globals, f"You created a global variable {new_globals} which is forbidden"

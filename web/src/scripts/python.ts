@@ -88,10 +88,10 @@ async function loadPreviousLessons(lesson: number) {
   await initDatabase();
 
   for (let i = 1; i < lesson; i++) {
-    const code = addImports((await getCurrentCode(i))!.code, i - 0);
     const lessonName = lessons.lessons[i - 1].title;
     const fileName = `/src/${lessonName}.py`;
-    py().FS.writeFile(fileName, code);
+    const code = await (await fetch(`/py/${i}_sol.py`)).text();
+    py().FS.writeFile(fileName, addImports(code, i));
   }
 }
 

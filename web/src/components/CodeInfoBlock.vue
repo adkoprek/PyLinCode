@@ -42,9 +42,9 @@ raise SingularError("Your custom message")
       `,
       code: `
 def lu(a: mat) -> tuple[mat, mat, mat]:
-  # Do your awesome PA=LU decomposition
+      # Do your awesome PA=LU decomposition
 
-  return P, L, U
+      return P, L, U
       `
     },
     {
@@ -64,8 +64,8 @@ def lu(a: mat) -> tuple[mat, mat, mat]:
     },
     {
       title: "Reusability",
-      desc: `In each function, you are allowed to reuse any functions you have already implemented.
-However, no other libraries are available.
+      desc: `In each function, you are allowed to reuse any functions you have already implemented and that is listed in the lesson overview.
+However, no other libraries are available. 
       `,
       code: `
 def det(a: mat) -> float:
@@ -74,6 +74,16 @@ def det(a: mat) -> float:
       # Compute the determinant using P, L, U
 
       return det
+      `
+    },
+    {
+      title: "Global Variables",
+      desc: `You are not allowed to create global variables in your code. Each function should be self-contained.
+              Watch out, any variables you define in an lesson will not be accessible in future lessons.`,
+      code: `
+def det(a: mat) -> float:
+      global variable
+      variable = 5   # This is not allowed
       `
     }
 ]);

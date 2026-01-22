@@ -6,7 +6,7 @@ from copy import copy
 
 from tests.consts import *
 from src.errors import SingularError, ShapeMismatchedError
-from src.solve import solve, for_sub, bck_sub
+import src.solve as solve
 from src.types import mat, vec
 
 @dataclass
@@ -47,17 +47,19 @@ def load_cases():
     return cases
 
 def run():
+    globals_before = set(solve.__dict__.keys())
+
     for c in load_cases():
         if c.error == SingularError:
             try:
-                solve(c.A, c.b)
+                solve.solve(c.A, c.b)
             except SingularError:
                 continue
             raise AssertionError("solve: expected SingularError")
 
         elif c.error == ShapeMismatchedError:
             try:
-                solve(c.A, c.b)
+                solve.solve(c.A, c.b)
             except ShapeMismatchedError:
                 continue
             raise AssertionError("solve: expected ShapeMismatchedError")
@@ -67,7 +69,7 @@ def run():
             cA_copy = copy(c.A)
             cb_copy = copy(c.b)
 
-            x = solve(c.A.tolist(), c.b.tolist())
+            x = solve.solve(c.A.tolist(), c.b.tolist())
             A = np.asarray(c.A, dtype=float)
             x = np.asarray(x, dtype=float)
             b = np.asarray(c.b, dtype=float)
@@ -89,7 +91,7 @@ def run():
             L_copy = copy(L)
             b_f_copy = copy(b_f)
 
-            y = for_sub(L, b_f)
+            y = solve.for_sub(L, b_f)
             y = np.asarray(y, dtype=float)
 
             assert y.shape == (n,)
@@ -106,7 +108,7 @@ def run():
             U_copy = copy(U)
             b_b_copy = copy(b_b)
 
-            x = bck_sub(U, b_b)
+            x = solve.bck_sub(U, b_b)
             x = np.asarray(x, dtype=float)
 
             assert x.shape == (n,)
@@ -114,3 +116,7 @@ def run():
 
             np.testing.assert_equal(U_copy, U, "bck_sub changed input U")
             np.testing.assert_equal(b_b_copy, b_b, "bck_sub changed input b")
+
+    globals_after = set(solve.__dict__.keys())
+    new_globals = globals_after - globals_before
+    assert not new_globals, f"You created a global variable {new_globals} which is forbidden"

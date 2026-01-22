@@ -5,7 +5,7 @@ from copy import copy
 
 from tests.consts import *
 from src.types import vec
-from src.vec_prj import vec_prj
+import src.vec_prj as vec_prj
 
 @dataclass
 class Case:
@@ -22,12 +22,18 @@ def load_cases():
     return cases
 
 def run():
+    globals_before = set(vec_prj.__dict__.keys())
+
     for c in load_cases():
         ca_copy = copy(c.a)
         cb_copy = copy(c.b)
 
-        result = vec_prj(c.a.tolist(), c.b.tolist())
+        result = vec_prj.vec_prj(c.a.tolist(), c.b.tolist())
         np.testing.assert_allclose(result, c.result, atol=0)
 
         np.testing.assert_equal(ca_copy, c.a, "You changed the input a")
         np.testing.assert_equal(cb_copy, c.b, "You changed the input b")
+
+    globals_after = set(vec_prj.__dict__.keys())
+    new_globals = globals_after - globals_before
+    assert not new_globals, f"You created a global variable {new_globals} which is forbidden"
