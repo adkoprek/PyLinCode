@@ -7,7 +7,7 @@ import { ref, onMounted, watch, Ref, onUnmounted } from "vue";
 import lessons_data from "@/assets/lessons.json"
 import SolutionChallange from "./SolutionChallange.vue";
 import Solution from "./Solution.vue";
-import { changeCurrent, getCurrentCode, getLocks, initDatabase, lockRange, addSubmition, deleteLock } from "@/scripts/db";
+import { changeCurrent, getCurrentCode, initDatabase, addSubmition } from "@/scripts/db";
 import debounce from "lodash.debounce";
 import { v4 as uuidv4 } from "uuid";
 
@@ -26,12 +26,9 @@ const isLoading = ref(false);
 
 const showChallenge = ref(false);
 const showSolution = ref(false);
-const showEditOverlay = ref(false);
 
 let solution: string = "";
 let challanged: boolean = false;
-
-let maxId = 0;
 
 let loaded = false;
 let worker!: Worker;
@@ -41,17 +38,11 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  locked: {
-    type: Boolean,
-    required: true
-  }
 });
 
 onMounted(async () => {
   await initDatabase();
   await loadCode(props.id);
-  await initLocks();
-  await handleEditOverlay();
   initMonaco();
   initPyodite();
 });
@@ -59,7 +50,6 @@ onMounted(async () => {
 
 watch(props, async () => {
   await loadCode(props.id);
-  await handleEditOverlay();
   output.value = [];
   loaded = false;
 })
@@ -79,28 +69,6 @@ const interval = setInterval(async () => {
 onUnmounted(() => {
   clearInterval(interval);
 });
-
-/****************************** LOCKS ********************************/
-
-async function initLocks() {
-  const locks = await getLocks();
-  lessons_data.lessons.sort((a, b) => a.id - b.id)
-  maxId = lessons_data.lessons.reduce((max, obj) => Math.max(max, obj.id), 0)
-
-  if (locks.length == 0) {
-    await lockRange(2, maxId)
-  }
-}
-
-async function handleEditOverlay() {
-  showEditOverlay.value = false;
-  const locks = await getLocks();
-  const minLock = locks.reduce((min, obj) => Math.min(min, parseInt(obj.id)), maxId + 1);
-
-  if (minLock - 1 != props.id && !props.locked) { 
-    showEditOverlay.value = true; 
-  }
-}
 
 
 /****************************** EDITOR ********************************/
@@ -173,10 +141,6 @@ function runCode() {
 
 
 async function nextLesson(payload: string) {
-  showEditOverlay.value = true;
-
-  if (props.id + 1 < maxId) await deleteLock(props.id + 1);
-
   await addSubmition({
     id: uuidv4(),
     lessonId: props.id,
@@ -219,9 +183,7 @@ function challangeComplete() {
       <div class="flex flex-col flex-1 h-screen">
         <DragRow class="flex-1" slider-bg-color="transparent" slider-bg-hover-color="trasparent" style="width: 100%;">
           <template #top>
-            <!-- Editor wrapper -->
             <div class="relative h-full overflow-hidden rounded-xl border shadow-inner">
-
               <CodeEditor
                 class="py-3 h-full"
                 v-model:value="code"
@@ -229,35 +191,6 @@ function challangeComplete() {
                 theme="my"
                 :options="editorOptions"
               />
-
-              <transition name="fade">
-                <div
-                  v-if="showEditOverlay"
-                  class="absolute inset-0 z-40
-                        flex items-center justify-center
-                        bg-black/40 backdrop-blur-sm"
-                >
-                  <div class="bg-white rounded-xl shadow-xl p-6 w-72 text-center space-y-4">
-                    <div class="text-lg font-semibold text-gray-800">
-                      Are you sure?
-                    </div>
-
-                    <div class="text-gray-600 text-sm">
-                      If you decide to edit this code all the future lessons will be locked
-                      because they might depend on this one. If you want to look at your code,
-                      check out the submissions on the right.
-                    </div>
-
-                    <button
-                      class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition"
-                      @click="async () => { lockRange(id + 1, maxId); showEditOverlay = false; }"
-                    >
-                      Edit
-                    </button>
-                  </div>
-                </div>
-              </transition>
-
             </div>
           </template>
           <template #bottom>

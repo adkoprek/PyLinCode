@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import not_found from '@/assets/not_found.svg';
 import Task from '@/components/Task.vue';
 import Editor from '@/components/Editor.vue';
@@ -7,7 +7,6 @@ import DragCol from "vue-resizer/DragCol.vue";
 import Sidebar from '@/components/SideBar.vue';
 import lessons_data from "../assets/lessons.json";
 import SubmissionsSideBar from '@/components/SubmissionsSideBar.vue';
-import { getLocks, initDatabase } from '@/scripts/db';
 
 const props = defineProps({
     id: {
@@ -17,24 +16,11 @@ const props = defineProps({
 });
 
 const lesson = ref({ id: -1, title: "" })
-const locked = ref(false);
-
-onMounted(async () => {
-    await initDatabase();
-    await checkLock();
-});
 
 watchEffect(() => {
-    locked.value = false;
     lesson.value = lessons_data.lessons.find(lesson => lesson.id === props.id) || { id: -1, title: "" };
 });
 
-async function checkLock() {
-    const locks = await getLocks();
-    locks.forEach((e) => {
-        if (props.id.toString() == e.id) locked.value = true;
-    });
-}
 </script>
 
 
@@ -43,20 +29,6 @@ async function checkLock() {
         <Sidebar :selected_id="lesson.id" />
 
         <div class="relative flex-1 h-full">
-
-            <!-- LOCK OVERLAY (only over content, not sidebar) -->
-            <div
-                v-if="locked"
-                class="absolute inset-0 z-40 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm"
-            >
-                <div class="bg-white rounded-2xl shadow-2xl px-10 py-8 text-center max-w-md">
-                    <h2 class="text-3xl font-bold mb-3">Lesson Locked</h2>
-                    <p class="text-gray-600 mb-6">
-                        Complete the previous lesson to unlock this one.
-                    </p>
-                </div>
-            </div>
-
             <!-- Lesson not found -->
             <div
                 v-if="lesson.id == -1"
@@ -78,7 +50,7 @@ async function checkLock() {
                     <Task :id="lesson.id" :title="lesson.title" />
                 </template>
                 <template #right>
-                    <Editor :id="lesson.id" :locked="locked" />
+                    <Editor :id="lesson.id" />
                 </template>
             </DragCol>
         </div>
