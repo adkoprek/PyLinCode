@@ -30,7 +30,7 @@
   <p align="center">
     An awesome website to learn linear algebra
     <br />
-    <a href="#">View Website</a>
+    <a href="https://pylinalg.com">View Website</a>
     ·
     <a href="https://github.com/adkoprek/LinAlg/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     ·
@@ -42,7 +42,7 @@
 ## About The Project
 
 <p align="center">
-  <img src="assets/drawable/screenshot.png" alt="Screenshot"/>
+  <img src="assets/screenshot.png" alt="Screenshot"/>
 </p>
 
 This project consists of a python Linear Algebra library written in python which is not efficient nor numerically stable but is though as a way of learning the mathematical concepts. The second part is a website that allows you to programm your own library.
