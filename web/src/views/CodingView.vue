@@ -25,7 +25,7 @@ watchEffect(() => {
 
 
 <template>
-    <div class="w-full flex bg-gray-50" style="height: calc(100vh - 3.5rem);">
+    <div class="w-full flex bg-gray-50 overflow-y-hidden" style="height: calc(100vh - 3.5rem);">
         <Sidebar :selected_id="lesson.id" />
 
         <div class="relative flex-1 h-full">
