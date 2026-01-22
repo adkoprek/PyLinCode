@@ -6,7 +6,7 @@ from copy import copy
 from tests.consts import *
 from src.types import mat
 from src.errors import ShapeMismatchedError
-from src.det import det
+import src.det as det
 
 @dataclass
 class Case:
@@ -29,17 +29,23 @@ def load_cases():
     return cases
 
 def run():
+    globals_before = set(det.__dict__.keys())
+
     for c in load_cases():
         if c.error:
             try:
-                det(c.a)
+                det.det(c.a)
             except ShapeMismatchedError:
                 continue
             raise AssertionError("det: expected ShapeMismatchedError")
         else:
             ca_copy = copy(c.a)
 
-            result = det(c.a.tolist())
+            result = det.det(c.a.tolist())
             assert abs(result - c.result) < ZERO
 
             np.testing.assert_equal(ca_copy, c.a, "Vou changed the input a")
+
+    globals_after = set(det.__dict__.keys())
+    new_globals = globals_after - globals_before
+    assert not new_globals, f"You created a global variable {new_globals} which is forbidden"

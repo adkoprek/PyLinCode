@@ -5,7 +5,7 @@ from copy import copy
 
 from tests.consts import *
 from src.types import mat
-from src.qr import qr
+import src.qr as qr
 
 @dataclass
 class Case:
@@ -19,10 +19,12 @@ def load_cases():
     return cases
 
 def run():
+    globals_before = set(qr.__dict__.keys())
+
     for c in load_cases():
         ca_copy = copy(c.a)
 
-        Q, R = qr(c.a.tolist())
+        Q, R = qr.qr(c.a.tolist())
         QM = np.array(Q)
         RM = np.array(R)
         np.testing.assert_allclose(QM @ QM.T, np.eye(len(Q)), atol=UNSTABLE_ZERO)
@@ -33,3 +35,7 @@ def run():
         assert np.allclose(RM, np.triu(RM), atol=UNSTABLE_ZERO)
 
         np.testing.assert_equal(ca_copy, c.a, "Vou changed the input a")
+
+    globals_after = set(qr.__dict__.keys())
+    new_globals = globals_after - globals_before
+    assert not new_globals, f"You created a global variable {new_globals} which is forbidden"

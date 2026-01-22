@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from copy import copy
 
 from tests.consts import *
-from src.mat_ide import mat_ide
+import src.mat_ide as mat_ide
 from src.types import mat
 
 
@@ -23,5 +23,11 @@ def load_cases():
 
 
 def run():
+    globals_before = set(mat_ide.__dict__.keys())
+
     for c in load_cases():
-        np.testing.assert_allclose(mat_ide(c.size), c.result, atol=0)
+        np.testing.assert_allclose(mat_ide.mat_ide(c.size), c.result, atol=0)
+
+    globals_after = set(mat_ide.__dict__.keys())
+    new_globals = globals_after - globals_before
+    assert not new_globals, f"You created a global variable {new_globals} which is forbidden"

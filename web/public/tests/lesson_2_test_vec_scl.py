@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from copy import copy
 
 from tests.consts import *
-from src.vec_scl import vec_scl
+import src.vec_scl as vec_scl
 from src.types import vec
 
 
@@ -24,11 +24,16 @@ def load_cases():
 
 
 def run():
+    globals_before = set(vec_scl.__dict__.keys())
+
     for c in load_cases():
         ca_copy = copy(c.a)
 
-        r = vec_scl(c.a.tolist(), c.s)
+        r = vec_scl.vec_scl(c.a.tolist(), c.s)
         np.testing.assert_allclose(r, c.result, atol=0)
 
         np.testing.assert_equal(ca_copy, c.a, "You changed the input a")
 
+    globals_after = set(vec_scl.__dict__.keys())
+    new_globals = globals_after - globals_before
+    assert not new_globals, f"You created a global variable {new_globals} which is forbidden"

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from copy import copy
 
 from tests.consts import *
-from src.mat_row import mat_row
+import src.mat_row as mat_row
 from src.types import mat, vec
 
 
@@ -25,9 +25,15 @@ def load_cases():
 
 
 def run():
+    globals_before = set(mat_row.__dict__.keys())
+
     for c in load_cases():
         cA_copy = copy(c.A)
 
-        np.testing.assert_allclose(mat_row(c.A.tolist(), c.row_index), c.result, atol=0)
+        np.testing.assert_allclose(mat_row.mat_row(c.A.tolist(), c.row_index), c.result, atol=0)
 
         np.testing.assert_equal(cA_copy, c.A, "You changed the input A")
+
+    globals_after = set(mat_row.__dict__.keys())
+    new_globals = globals_after - globals_before
+    assert not new_globals, f"You created a global variable {new_globals} which is forbidden"
