@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@marsio/vue-split-pane": "^1.0.0",
+    "vue3-resize": "^0.2.0"
+  }
+}

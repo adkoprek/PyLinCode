@@ -15,7 +15,7 @@ const props = defineProps({
     }
 });
 
-const lesson = ref({ id: -1, title: "" })
+const lesson = ref({ id: -1, title: "" });
 
 watchEffect(() => {
     lesson.value = lessons_data.lessons.find(lesson => lesson.id === props.id) || { id: -1, title: "" };
@@ -28,7 +28,7 @@ watchEffect(() => {
     <div class="w-full flex bg-gray-50 overflow-y-hidden" style="height: calc(100vh - 3.5rem);">
         <Sidebar :selected_id="lesson.id" />
 
-        <div class="relative flex-1 h-full">
+        <div class="relative flex-1 min-w-0 h-full">
             <!-- Lesson not found -->
             <div
                 v-if="lesson.id == -1"
